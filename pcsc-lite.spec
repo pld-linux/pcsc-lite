@@ -1,13 +1,14 @@
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.2.0
-Release:	2
+Version:	1.2.9
+%define	bver	beta5
+Release:	0.%{bver}.1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=1225
-Source0:	http://alioth.debian.org/download.php/419/%{name}-%{version}.tar.gz
-# Source0-md5:	98456d274b2f4bfe74c5ab59070f8d50
+Source0:	http://alioth.debian.org/download.php/715/%{name}-%{version}-%{bver}.tar.gz
+# Source0-md5:	7ab0d49d51e81b62a66e703d2ceaa1f3
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -76,7 +77,7 @@ Static PC/SC Lite libraries.
 Statyczne biblioteki PC/SC Lite.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}-%{bver}
 %patch0 -p1
 
 %build
@@ -100,9 +101,6 @@ install -d $RPM_BUILD_ROOT{%{muscledropdir},%{usbdropdir}} \
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-# useful for drivers development
-install src/ifdhandler.h $RPM_BUILD_ROOT%{_includedir}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
@@ -134,15 +132,16 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY doc/README.DAEMON
+%attr(755,root,root) %{_bindir}/formaticc
+%attr(755,root,root) %{_sbindir}/bundleTool
+%attr(755,root,root) %{_sbindir}/installifd
+%attr(755,root,root) %{_sbindir}/pcscd
+%{_libdir}/pcsc
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/reader.conf
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pcscd
-%attr(755,root,root) %{_sbindir}/pcscd
-%attr(755,root,root) %{_bindir}/bundleTool
-%attr(755,root,root) %{_bindir}/formaticc
-%attr(755,root,root) %{_bindir}/installifd
-%{_libdir}/pcsc
 %{_mandir}/man1/formaticc.1*
+%{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/bundleTool.8*
 %{_mandir}/man8/pcscd.8*
 
@@ -155,7 +154,7 @@ fi
 %doc doc/*.pdf
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
-%{_includedir}/*.h
+%{_includedir}/PCSC
 %{_pkgconfigdir}/*.pc
 %{_examplesdir}/%{name}-%{version}
 
