@@ -6,6 +6,8 @@ License:	BSD
 Group:		System Environment/Daemons
 Source0:	%{name}-%{version}.tar.gz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+Requires:	rc-scripts
+Requires:	pthread-devel
 
 %description
 pcscd is the daemon program for PC/SC Lite. It is a resource manager
@@ -20,6 +22,18 @@ Pcscd jest demonem dla  PC/SC Lite. Koordynuje on komunikacjê z
 czytnikami Smart Card. Celem pcscd jest udostêpnienie interfejsu
 zgodnego z  Windows(R) SCard. Demon ten u¿ywa winscard api, tak
 jak Microsoft[TM] Windows(R).
+
+%package devel
+Summary:    Development files
+Summary(pl):    Pliki dla developerów
+Group:      Development/Tools
+Requires:   %{name} = %{version}
+
+%description devel
+Development files
+
+%description -l pl devel
+Pliki dla developerów
 
 
 %prep
@@ -50,12 +64,16 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/reader.conf
 %attr(755,root,root) %{_sbindir}/pcscd
 %attr(755,root,root) %{_bindir}/bundleTool
-
 %doc doc/*
-%doc AUTHORS   DRIVERS         NEWS  HELP            README SECURITY
+%doc AUTHORS DRIVERS NEWS HELP README SECURITY
+%{_mandir}/man1/bundleTool.1.gz
+%{_mandir}/man8/pcscd.8.gz
 
+
+%files devel
 %{_libdir}/*
 %{_includedir}/*
+
 #/etc/init.d/pcscd
 #/etc/rc.d/rc0.d/K81pcscd
 #/etc/rc.d/rc1.d/K81pcscd
@@ -64,5 +82,3 @@ rm -rf $RPM_BUILD_ROOT
 #/etc/rc.d/rc4.d/S21pcscd
 #/etc/rc.d/rc5.d/S21pcscd
 #/etc/rc.d/rc6.d/K81pcscd
-%{_mandir}/man1/bundleTool.1.gz
-%{_mandir}/man8/pcscd.8.gz
