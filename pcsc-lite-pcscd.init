@@ -46,7 +46,6 @@ case "$1" in
 	if [ -f /var/lock/subsys/pcscd ]; then
 		msg_stopping pcscd
 		killproc pcscd
-		RETVAL=$?
 		rm -f /var/lock/subsys/pcscd
 	else
 		# show "%s service is not running." pcscd
