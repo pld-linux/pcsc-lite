@@ -6,6 +6,7 @@ Release:	2
 License:	BSD
 Group:		Daemons
 Source0:	http://linuxnet.com/middleware/file/%{name}-%{version}.tar.gz
+# Source0-md5:	3ddbe45100c686230d341bd0e00c472d
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
