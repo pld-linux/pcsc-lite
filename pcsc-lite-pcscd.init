@@ -4,13 +4,21 @@
 #
 # chkconfig:	2345 12 88
 #
-# description:	daemon for pcsc-lite and musclecard framework
+# description: The PC/SC smart card daemon is a resource manager for the \
+#              PC/SC lite and Musclecard frameworks.  It coordinates \
+#              communications with smart card readers, smart cards, and \
+#              cryptographic tokens that are connected to the system.
+#
+# processname: pcscd
+# config:      /etc/reader.conf
 #
 # $Id$
 
 
 # Source function library
 . /etc/rc.d/init.d/functions
+
+umask 077
 
 # Set defaults
 LOGGING="yes"
@@ -32,7 +40,7 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/pcscd ]; then
 		# show "Starting %s service" pcscd
 		msg_starting pcscd
-		daemon pcscd $LOGOPT
+		/usr/sbin/update-reader.conf && daemon pcscd $LOGOPT
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pcscd
 	else
