@@ -21,8 +21,8 @@ PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		muscledropdir	/usr/lib/pcsc/services
-%define		usbdropdir	/usr/lib/pcsc/drivers
+%define		muscledropdir	/usr/%{_lib}/pcsc/services
+%define		usbdropdir	/usr/%{_lib}/pcsc/drivers
 
 %description
 pcscd is the daemon program for PC/SC Lite. It is a resource manager
