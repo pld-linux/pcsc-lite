@@ -1,0 +1,7 @@
+# Customized settings for pcscd
+
+# set to "no" if you don't want pcscd messages in syslog
+LOGGING="yes"
+
+# Define nice level for pcscd
+SERVICE_RUN_NICE_LEVEL="+0"
