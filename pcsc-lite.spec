@@ -1,7 +1,3 @@
-
-%define _perl_version 1.1.3
-%define _tools_version 1.2.3
-
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
@@ -10,8 +6,7 @@ Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	http://linuxnet.com/middleware/file/%{name}-%{version}.tar.gz
-Source1:	http://ludovic.rousseau.free.fr/softwares/pcsc-perl/pcsc-perl-%{_perl_version}.tar.gz
-Source2:	http://ludovic.rousseau.free.fr/softwares/pcsc-tools/pcsc-tools-%{_tools_version}.tar.gz
+URL:		http://www.linuxnet.com/middle.html
 PreReq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -21,7 +16,7 @@ that coorinates communications with Smart Card readers and Smart Cards
 that are connected to the system. The purpose of PCSC Lite is to
 provide a Windows(R) SCard interface in a very small form factor for
 communicating to smartcards and readers. PCSC Lite uses the same
-winscard api as used under Windows(R)
+winscard api as used under Windows(R).
 
 %description -l pl
 pcscd jest demonem dla PC/SC Lite. Jest to zarz±dca zasobów,
@@ -32,64 +27,46 @@ U¿ywa tego samego API winscard, które jest u¿ywane pod Microsoft[TM]
 Windows(R).
 
 %package libs
-Summary:	PCSC libraries
-Summary(pl):	Biblioteki PCSC
+Summary:	PC/SC Lite libraries
+Summary(pl):	Biblioteki PC/SC Lite
 Group:		Libraries
 
 %description libs
-What is a package w/o his libs?
+PC/SC Lite libraries.
 
 %description libs -l pl
-Bo czym¿e jest pakiet bez swoich bibliotek?
+Biblioteki PC/SC Lite.
 
 %package devel
-Summary:	Development files
-Summary(pl):	Pliki dla programistów
+Summary:	PC/SC Lite development files
+Summary(pl):	Pliki dla programistów u¿ywaj±cych PC/SC Lite
 Group:		Development/Tools
 Requires:	%{name}-libs = %{version}
 
 %description devel
-Development files.
+PC/SC Lite development files.
 
 %description devel -l pl
-Pliki dla programistów.
+Pliki dla programistów u¿ywaj±cych PC/SC Lite.
 
 %package static
-Summary:	Static PCSC libraries
-Summary(pl):	Biblioteki statyczne PCSC
+Summary:	Static PC/SC Lite libraries
+Summary(pl):	Biblioteki statyczne PC/SC Lite
 Group:		Development/Tools
 Requires:	%{name}-devel = %{version}
 
 %description static
-Static PSCS libraries.
+Static PC/SC Lite libraries.
 
 %description static -l pl
-Statyczne biblioteki PCSC.
-
-%package -n pcsc-tools
-Summary:	Tools
-Summary(pl):	Narzêdzia 
-Group:		Applications
-Requires:	%{name}-libs = %{version}
-
-%description -n pcsc-tools
-PCSC tools.
-
-%description -n pcsc-tools -l pl
-Narzêdzia do PCSC.
+Statyczne biblioteki PC/SC Lite.
 
 %prep
-%setup -q -a1 -a2
+%setup -q
 
 %build
 %configure2_13
-%{__make}
 
-cd pcsc-perl-%{_perl_version}
-perl Makefile.PL
-%{__make}
-cd ..
-cd pcsc-tools-%{_tools_version}
 %{__make}
 
 %install
@@ -99,11 +76,6 @@ rm -rf $RPM_BUILD_ROOT
 # should have "chkconfig 2345 21 81"
 #install -m 755 etc/pcscd.startup /etc/rc.d/init.d/pcscd
 
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1/}
-
-install pcsc-tools-%{_tools_version}/{ATR_analysis,pcsc_scan,gscriptor,scriptor} $RPM_BUILD_ROOT%{_bindir}
-install pcsc-tools-%{_tools_version}/{ATR_analysis,pcsc_scan,gscriptor,scriptor}*gz $RPM_BUILD_ROOT%{_mandir}/man1
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -112,8 +84,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc/*
-%doc AUTHORS DRIVERS NEWS HELP README SECURITY
+%doc AUTHORS COPYING DRIVERS NEWS HELP README SECURITY doc/{README.DAEMON,*.pdf,pcscd.startup}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/reader.conf
 %attr(755,root,root) %{_sbindir}/pcscd
 %attr(755,root,root) %{_bindir}/bundleTool
@@ -125,25 +96,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files libs
 %defattr(644,root,root,755)
-%{_libdir}/lib*.so.*
+%attr(755,root,root) %{_libdir}/lib*.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
-%{_libdir}/lib*.so
+%attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/libpcsc*.la
-%{_includedir}/*
+%{_includedir}/*.h
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-
-%files -n pcsc-tools
-%defattr(644,root,root,755)
-%{_bindir}/ATR_analysis
-%{_bindir}/pcsc_scan
-%{_bindir}/gscriptor
-%{_bindir}/scriptor
-%{_mandir}/man1/ATR_analysis*
-%{_mandir}/man1/pcsc_scan*
-%{_mandir}/man1/gscriptor*
-%{_mandir}/man1/scriptor*
