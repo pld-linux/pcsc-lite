@@ -11,8 +11,6 @@ Source0:	http://alioth.debian.org/download.php/419/%{name}-%{version}.tar.gz
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
-Patch1:		%{name}-link.patch
-Patch2:		%{name}-amfix.patch
 URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
