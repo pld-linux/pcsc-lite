@@ -2,7 +2,7 @@
 #
 # pcscd		PC/SC Smartcard daemon
 #
-# chkconfig:    2345 12 88
+# chkconfig:	2345 12 88
 #
 # description:	daemon for pcsc-lite and musclecard framework
 #
@@ -24,6 +24,7 @@ else
 	LOGOPT=""
 fi
 
+
 # See how we were called.
 case "$1" in
   start)
@@ -39,10 +40,10 @@ case "$1" in
 		msg_already_running pcscd
 		exit 1
 	fi
-        ;;
+	;;
   stop)
-        # Stop daemons.
-        # show "Stopping %s service" pcscd
+	# Stop daemons.
+	# show "Stopping %s service" pcscd
 	if [ -f /var/lock/subsys/pcscd ]; then
 		msg_stopping pcscd
 		killproc pcscd
@@ -53,20 +54,20 @@ case "$1" in
 		msg_not_running pcscd
 		exit 1
 	fi	
-        ;;
+	;;
   restart|reload|force-reload)
 	# pcscd doesn't support reloading on HUP
-        $0 stop
+	$0 stop
 	$0 start
-        ;;
+	;;
   status)
 	status pcscd
 	RETVAL=$?
-        ;;
+	;;
   *)
-        # show "Usage: %s {start|stop|status|restart|reload|force-reload}" $0
-	msg_usage "$0 {start|stop|status|restart|reload|force-reload}"
-        exit 1
+	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 1
 esac
 
 exit $RETVAL
