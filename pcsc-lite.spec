@@ -1,25 +1,30 @@
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.1.1
-Release:	3
+Version:	1.2.0
+Release:	1
 License:	BSD
 Group:		Daemons
-Source0:	http://linuxnet.com/middleware/file/%{name}-%{version}.tar.gz
-# Source0-md5:	3ddbe45100c686230d341bd0e00c472d
+#Source0Download: https://alioth.debian.org/project/showfiles.php?group_id=1225
+Source0:	https://alioth.debian.org/download.php/419/%{name}-%{version}.tar.gz
+# Source0-md5:	98456d274b2f4bfe74c5ab59070f8d50
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-amfix.patch
 URL:		http://www.linuxnet.com/middle.html
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	flex
-BuildRequires:	libtool
+BuildRequires:	libtool >= 1.4.2-9
+BuildRequires:	libusb-devel
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		muscledropdir	/usr/lib/pcsc/services
+%define		usbdropdir	/usr/lib/pcsc/drivers
 
 %description
 pcscd is the daemon program for PC/SC Lite. It is a resource manager
@@ -75,22 +80,25 @@ Statyczne biblioteki PC/SC Lite.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
 %{__libtoolize}
-%{__aclocal} -I build
+%{__aclocal} -I aclocal
 %{__autoconf}
+%{__autoheader}
 %{__automake}
-%configure
+%configure \
+	--enable-muscledropdir=%{muscledropdir} \
+	--enable-runpid=/var/run/pcscd.pid \
+	--enable-usbdropdir=%{usbdropdir}
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_libdir}/pcsc/{drivers,services} \
-	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig}
+install -d $RPM_BUILD_ROOT{%{muscledropdir},%{usbdropdir}} \
+	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
+	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -100,6 +108,8 @@ install src/ifdhandler.h $RPM_BUILD_ROOT%{_includedir}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
+
+install doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -125,7 +135,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING DRIVERS NEWS HELP README SECURITY doc/{README.DAEMON,*.pdf,pcscd.startup}
+%doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY doc/README.DAEMON
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/reader.conf
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pcscd
@@ -134,7 +144,8 @@ fi
 %attr(755,root,root) %{_bindir}/formaticc
 %attr(755,root,root) %{_bindir}/installifd
 %{_libdir}/pcsc
-%{_mandir}/man1/bundleTool.1*
+%{_mandir}/man1/formaticc.1*
+%{_mandir}/man8/bundleTool.8*
 %{_mandir}/man8/pcscd.8*
 
 %files libs
@@ -143,9 +154,12 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%doc doc/*.pdf
 %attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/libpcsc*.la
+%{_libdir}/lib*.la
 %{_includedir}/*.h
+%{_pkgconfigdir}/*.pc
+%{_examplesdir}/%{name}-%{version}
 
 %files static
 %defattr(644,root,root,755)
