@@ -27,14 +27,14 @@ Windows(R).
 
 %package libs
 Summary:	Libraries
-Summary(pl):    Bibloteki 
+Summary(pl):    Bibloteki
 Group:		Libraries
 
 %description libs
 What is a package w/o his libs?
 
 %description libs -l pl
-Bo czym¿ jest pakiet bez swoich biblotek?
+Bo czym¿e jest pakiet bez swoich bibliotek?
 
 %package devel
 Summary:	Development files
