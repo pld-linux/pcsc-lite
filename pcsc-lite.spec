@@ -1,3 +1,7 @@
+
+%define _perl_version 1.1.3
+%define _tools_version 1.2.3
+
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
@@ -5,7 +9,9 @@ Version:	1.1.1
 Release:	1
 License:	BSD
 Group:		Daemons
-Source0:	%{name}-%{version}.tar.gz
+Source0:	http://linuxnet.com/middleware/file/%{name}-%{version}.tar.gz
+Source1:	http://ludovic.rousseau.free.fr/softwares/pcsc-perl/pcsc-perl-%{_perl_version}.tar.gz
+Source2:	http://ludovic.rousseau.free.fr/softwares/pcsc-tools/pcsc-tools-%{_tools_version}.tar.gz
 PreReq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -27,7 +33,7 @@ Windows(R).
 
 %package libs
 Summary:	Libraries
-Summary(pl):    Bibloteki
+Summary(pl):	Bibloteki
 Group:		Libraries
 
 %description libs
@@ -60,12 +66,30 @@ Static PSCS libraries.
 %description static -l pl
 Statyczne biblioteki PCSC.
 
+%package -n pcsc-tools
+Summary:    Tools
+Summary(pl):   Narzêdzia 
+Group:      Development/Tools
+Requires:   %{name}-libs = %{version}
+
+%description -n pcsc-tools
+
+%description -n pcsc-tools -l pl
+
 %prep
-%setup -q
+%setup -q -a1 -a2
 
 %build
 %configure2_13
 %{__make}
+
+cd pcsc-perl-%{_perl_version}
+perl Makefile.PL
+%{__make}
+cd ..
+cd pcsc-tools-%{_tools_version}
+%{__make}
+
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -73,6 +97,11 @@ rm -rf $RPM_BUILD_ROOT
 
 # should have "chkconfig 2345 21 81"
 #install -m 755 etc/pcscd.startup /etc/rc.d/init.d/pcscd
+
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1/}
+
+install  pcsc-tools-%{_tools_version}/{ATR_analysis,pcsc_scan,gscriptor,scriptor} $RPM_BUILD_ROOT%{_bindir}/
+install  pcsc-tools-%{_tools_version}/{ATR_analysis,pcsc_scan,gscriptor,scriptor}*gz $RPM_BUILD_ROOT%{_mandir}/man1/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -106,3 +135,14 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
+
+%files -n pcsc-tools
+%defattr(644,root,root,755)
+%{_bindir}/ATR_analysis
+%{_bindir}/pcsc_scan
+%{_bindir}/gscriptor
+%{_bindir}/scriptor
+%{_mandir}/man1/ATR_analysis*
+%{_mandir}/man1/pcsc_scan*
+%{_mandir}/man1/gscriptor*
+%{_mandir}/man1/scriptor*
