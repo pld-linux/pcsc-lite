@@ -1,13 +1,13 @@
 Summary:	Muscle PCSC Framework for Linux
+Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.1.1
 Release:	1
 License:	BSD
-Group:		System Environment/Daemons
+Group:		Daemons
 Source0:	%{name}-%{version}.tar.gz
+PreReq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-Requires:	rc-scripts
-Requires:	pthread-devel
 
 %description
 pcscd is the daemon program for PC/SC Lite. It is a resource manager
@@ -18,103 +18,91 @@ communicating to smartcards and readers. PCSC Lite uses the same
 winscard api as used under Windows(R)
 
 %description -l pl
-Pcscd jest demonem dla  PC/SC Lite. Koordynuje on komunikacjê z 
-czytnikami Smart Card. Celem pcscd jest udostêpnienie interfejsu
-zgodnego z  Windows(R) SCard. Demon ten u¿ywa winscard api, tak
-jak Microsoft[TM] Windows(R).
-
-%package devel
-Summary:    Development files
-Summary(pl):    Pliki dla developerów
-Group:      Development/Tools
-Requires:   %{name} = %{version}
-
-%description devel
-Development files
-
-%description -l pl devel
-Pliki dla developerów
-
+pcscd jest demonem dla PC/SC Lite. Jest to zarz±dca zasobów,
+koordynuj±cy komunikacjê z czytnikami Smart Card pod³±czonymi do
+systemu. Celem PCSC Lite jest udostêpnienie interfejsu zgodnego z
+Windows(R) SCard s³u¿±cego do komunikacji z czytnikami kart chipowych.
+U¿ywa tego samego API winscard, które jest u¿ywane pod Microsoft[TM]
+Windows(R).
 
 %package libs
-Summary:    libraries
+Summary:	Libraries
 Summary(pl):    Bibloteki 
-Group:      Development/Tools
-Requires:   %{name} = %{version}
+Group:		Libraries
 
 %description libs
 What is a package w/o his libs?
 
-%description -l pl libs
-Bo czym¿ jest pakiet bez swoich biblotek ?
+%description libs -l pl
+Bo czym¿ jest pakiet bez swoich biblotek?
 
-%post libs
-/sbin/ldconfig
+%package devel
+Summary:	Development files
+Summary(pl):	Pliki dla programistów
+Group:		Development/Tools
+Requires:	%{name}-libs = %{version}
+
+%description devel
+Development files.
+
+%description devel -l pl
+Pliki dla programistów.
 
 %package static
-Summary:    Static libraries
-Summary(pl):    Bibloteki statyczne
-Group:      Development/Tools
-Requires:   %{name} = %{version}
+Summary:	Static libraries
+Summary(pl):	Bibloteki statyczne
+Group:		Development/Tools
+Requires:	%{name}-devel = %{version}
 
 %description static
-What is a package w/o -static?
+Static PSCS libraries.
 
-%description -l pl static
-Bo czym¿ jest pakiet bez -static ?
+%description static -l pl
+Statyczne biblioteki PCSC.
 
 %prep
 %setup -q
 
 %build
-
-%{configure2_13}
+%configure2_13
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-#install -m 755 etc/pcscd.startup /etc/init.d/pcscd
-#ln -sf /etc/init.d/pcscd /etc/rc.d/rc0.d/K81pcscd
-#ln -sf /etc/init.d/pcscd /etc/rc.d/rc1.d/K81pcscd
-#ln -sf /etc/init.d/pcscd /etc/rc.d/rc2.d/S21pcscd
-#ln -sf /etc/init.d/pcscd /etc/rc.d/rc3.d/S21pcscd
-#ln -sf /etc/init.d/pcscd /etc/rc.d/rc4.d/S21pcscd
-#ln -sf /etc/init.d/pcscd /etc/rc.d/rc5.d/S21pcscd
-#ln -sf /etc/init.d/pcscd /etc/rc.d/rc6.d/K81pcscd
+
+# should have "chkconfig 2345 21 81"
+#install -m 755 etc/pcscd.startup /etc/rc.d/init.d/pcscd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
+%doc doc/*
+%doc AUTHORS DRIVERS NEWS HELP README SECURITY
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/reader.conf
 %attr(755,root,root) %{_sbindir}/pcscd
 %attr(755,root,root) %{_bindir}/bundleTool
 %attr(755,root,root) %{_bindir}/formaticc
 %attr(755,root,root) %{_bindir}/installifd
+#%attr(754,root,root) /etc/rc.d/init.d/pcscd
+%{_mandir}/man1/bundleTool.1*
+%{_mandir}/man8/pcscd.8*
 
-%doc doc/*
-%doc AUTHORS DRIVERS NEWS HELP README SECURITY
-%{_mandir}/man1/bundleTool.1.gz
-%{_mandir}/man8/pcscd.8.gz
-
+%files libs
+%defattr(644,root,root,755)
+%{_libdir}/lib*.so.*
 
 %files devel
+%defattr(644,root,root,755)
+%{_libdir}/lib*.so
+%{_libdir}/libpcsc*.la
 %{_includedir}/*
 
 %files static
-%{_libdir}/*\.a
-
-%files libs
-%{_libdir}/*so*
-%{_libdir}/libpcsc*\.la
-
-#/etc/init.d/pcscd
-#/etc/rc.d/rc0.d/K81pcscd
-#/etc/rc.d/rc1.d/K81pcscd
-#/etc/rc.d/rc2.d/S21pcscd
-#/etc/rc.d/rc3.d/S21pcscd
-#/etc/rc.d/rc4.d/S21pcscd
-#/etc/rc.d/rc5.d/S21pcscd
-#/etc/rc.d/rc6.d/K81pcscd
+%defattr(644,root,root,755)
+%{_libdir}/lib*.a
