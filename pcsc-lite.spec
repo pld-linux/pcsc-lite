@@ -2,10 +2,13 @@ Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.1.1
-Release:	1
+Release:	2
 License:	BSD
 Group:		Daemons
 Source0:	http://linuxnet.com/middleware/file/%{name}-%{version}.tar.gz
+Source1:	%{name}-pcscd.init
+Source2:	%{name}-pcscd.sysconfig
+Patch0:		%{name}-fhs.patch
 URL:		http://www.linuxnet.com/middle.html
 PreReq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -20,10 +23,10 @@ winscard api as used under Windows(R).
 
 %description -l pl
 pcscd jest demonem dla PC/SC Lite. Jest to zarz±dca zasobów,
-koordynuj±cy komunikacjê z czytnikami Smart Card pod³±czonymi do
-systemu. Celem PCSC Lite jest udostêpnienie interfejsu zgodnego z
+koordynuj±cy komunikacjê z czytnikami kart procesorowych pod³±czonymi
+do systemu. Celem PCSC Lite jest udostêpnienie interfejsu zgodnego z
 Windows(R) SCard s³u¿±cego do komunikacji z czytnikami kart chipowych.
-U¿ywa tego samego API winscard, które jest u¿ywane pod Microsoft[TM]
+U¿ywa tego samego API winscard, które jest u¿ywane pod Microsoft(TM)
 Windows(R).
 
 %package libs
@@ -63,6 +66,7 @@ Statyczne biblioteki PC/SC Lite.
 
 %prep
 %setup -q
+%patch -p1
 
 %build
 %configure2_13
@@ -71,16 +75,36 @@ Statyczne biblioteki PC/SC Lite.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_libdir}/pcsc/{drivers,services} \
+	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig}
+
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 # useful for drivers development
 install src/ifdhandler.h $RPM_BUILD_ROOT%{_includedir}
 
-# should have "chkconfig 2345 21 81"
-#install -m 755 etc/pcscd.startup /etc/rc.d/init.d/pcscd
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+/sbin/chkconfig --add pcscd
+if [ -f /var/lock/subsys/pcscd ]; then
+	/etc/rc.d/init.d/pcscd restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/pcscd start\" to start pcscd daemon."
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/pcscd ]; then
+		/etc/rc.d/init.d/pcscd stop >&2
+	fi
+	/sbin/chkconfig --del pcscd
+fi
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
@@ -89,11 +113,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING DRIVERS NEWS HELP README SECURITY doc/{README.DAEMON,*.pdf,pcscd.startup}
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/reader.conf
+%attr(754,root,root) /etc/rc.d/init.d/pcscd
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pcscd
 %attr(755,root,root) %{_sbindir}/pcscd
 %attr(755,root,root) %{_bindir}/bundleTool
 %attr(755,root,root) %{_bindir}/formaticc
 %attr(755,root,root) %{_bindir}/installifd
-#%attr(754,root,root) /etc/rc.d/init.d/pcscd
+%{_libdir}/pcsc
 %{_mandir}/man1/bundleTool.1*
 %{_mandir}/man8/pcscd.8*
 
