@@ -24,7 +24,7 @@ else
 	LOGOPT=""
 fi
 
-
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
@@ -38,7 +38,6 @@ case "$1" in
 	else
 		# show "%s service is already running." pcscd
 		msg_already_running pcscd
-		exit 1
 	fi
 	;;
   stop)
@@ -52,22 +51,22 @@ case "$1" in
 	else
 		# show "%s service is not running." pcscd
 		msg_not_running pcscd
-		exit 1
 	fi	
 	;;
-  restart|reload|force-reload)
+  restart|force-reload)
 	# pcscd doesn't support reloading on HUP
 	$0 stop
 	$0 start
+	exit $?
 	;;
   status)
 	status pcscd
-	RETVAL=$?
+	exit $?
 	;;
   *)
-	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
-	exit 1
+	# show "Usage: %s {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
