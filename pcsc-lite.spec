@@ -6,7 +6,7 @@ Version:	1.2.9
 Release:	0.%{bver}.1
 License:	BSD
 Group:		Daemons
-#Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=1225
+#Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
 Source0:	http://alioth.debian.org/download.php/753/%{name}-%{version}-%{bver}.tar.gz
 # Source0-md5:	ba8896b9382bc5d6e6d1159013e23e10
 Source1:	%{name}-pcscd.init
