@@ -36,6 +36,33 @@ Development files
 Pliki dla developerów
 
 
+%package libs
+Summary:    libraries
+Summary(pl):    Bibloteki 
+Group:      Development/Tools
+Requires:   %{name} = %{version}
+
+%description libs
+What is a package w/o his libs?
+
+%description -l pl libs
+Bo czym¿ jest pakiet bez swoich biblotek ?
+
+%post libs
+/sbin/ldconfig
+
+%package static
+Summary:    Static libraries
+Summary(pl):    Bibloteki statyczne
+Group:      Development/Tools
+Requires:   %{name} = %{version}
+
+%description static
+What is a package w/o -static?
+
+%description -l pl static
+Bo czym¿ jest pakiet bez -static ?
+
 %prep
 %setup -q
 
@@ -64,6 +91,9 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/reader.conf
 %attr(755,root,root) %{_sbindir}/pcscd
 %attr(755,root,root) %{_bindir}/bundleTool
+%attr(755,root,root) %{_bindir}/formaticc
+%attr(755,root,root) %{_bindir}/installifd
+
 %doc doc/*
 %doc AUTHORS DRIVERS NEWS HELP README SECURITY
 %{_mandir}/man1/bundleTool.1.gz
@@ -71,8 +101,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files devel
-%{_libdir}/*
 %{_includedir}/*
+
+%files static
+%{_libdir}/*\.a
+
+%files libs
+%{_libdir}/*so*
+%{_libdir}/libpcsc*\.la
 
 #/etc/init.d/pcscd
 #/etc/rc.d/rc0.d/K81pcscd
