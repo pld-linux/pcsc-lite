@@ -1,0 +1,139 @@
+diff -Nur pcsc-lite-1.1.1.orig/DRIVERS pcsc-lite-1.1.1/DRIVERS
+--- pcsc-lite-1.1.1.orig/DRIVERS	Mon Jul  1 18:28:39 2002
++++ pcsc-lite-1.1.1/DRIVERS	Tue Mar 11 10:52:56 2003
+@@ -2,18 +2,18 @@
+ 
+ To install drivers download the driver from http://www.linuxnet.com
+ and copy it to a temporary location.  After you have unarchived the files
+-copy the directory to /usr/local/pcsc/drivers.  If the directory 
+-/usr/local/pcsc/drivers does not exist create it before copying the driver
++copy the directory to /usr/lib/pcsc/drivers.  If the directory 
++/usr/lib/pcsc/drivers does not exist create it before copying the driver
+ directory to it.
+ 
+ Example Mac OS X, Linux 2.4:
+ 
+ tar -xzvf driver.bundle-0.1.0.tar.gz
+-cp -r driver.bundle /usr/local/pcsc/drivers
+-cd /usr/local/pcsc/drivers/driver.bundle
++cp -r driver.bundle /usr/lib/pcsc/drivers
++cd /usr/lib/pcsc/drivers/driver.bundle
+ build or use Project Builder to build
+ 
+-The /usr/local/pcsc/drivers directory should contain bundle directories only.
++The /usr/lib/pcsc/drivers directory should contain bundle directories only.
+ You must restart pcscd to use the new driver.
+ 
+ 
+diff -Nur pcsc-lite-1.1.1.orig/doc/bundleTool.1 pcsc-lite-1.1.1/doc/bundleTool.1
+--- pcsc-lite-1.1.1.orig/doc/bundleTool.1	Mon Jul  1 18:28:39 2002
++++ pcsc-lite-1.1.1/doc/bundleTool.1	Tue Mar 11 10:54:20 2003
+@@ -48,4 +48,4 @@
+ .B pcscd(8)
+ .SH BUGS
+ Plugins MUST reside in 
+-.I /usr/local/pcsc/services
++.I /usr/lib/pcsc/services
+diff -Nur pcsc-lite-1.1.1.orig/doc/pcscd.8 pcsc-lite-1.1.1/doc/pcscd.8
+--- pcsc-lite-1.1.1.orig/doc/pcscd.8	Mon Jul  1 18:28:39 2002
++++ pcsc-lite-1.1.1/doc/pcscd.8	Tue Mar 11 10:55:23 2003
+@@ -43,17 +43,17 @@
+ 
+ When a smart card is inserted into a reader, pcscd uses the ATR string from 
+ the card to identify this card.  The 
+-.I /usr/local/pcsc/serices 
++.I /usr/lib/pcsc/serices 
+ directory contains plug-ins for the card.  These plug-ins are searched.  If 
+ the ATR string matches, the client library loads that plug-in for that 
+ token.
+ .SH "SERIAL SMART CARD READER DRIVERS"
+ Smart card reader drivers are placed in the 
+-.I /usr/local/pcsc/drivers 
++.I /usr/lib/pcsc/drivers 
+ directory. Each driver is simply an 
+ .I *.so 
+ file.  The pcscd locates the driver with the 
+-.I usr/local/etc/reader.conf 
++.I /etc/reader.conf 
+ file.  The file has the following format:
+ 
+ .RS
+@@ -68,7 +68,7 @@
+ DEVICENAME	GEN_SMART_RDR
+ .RE
+ .RS
+-LIBPATH	        /usr/local/pcsc/drivers/my_reader.so
++LIBPATH	        /usr/lib/pcsc/drivers/my_reader.so
+ .RE
+ .RS
+ CHANNELID	0x0103F8
+@@ -103,18 +103,18 @@
+ COM4     0x0102E8
+ 
+ Multiple drivers can be listed in 
+-.I usr/local/etc/reader.conf.
++.I /etc/reader.conf.
+ 
+ Drivers are available at http://www.musclecard.com
+ .SH "SMART CARD PLUG-INS"
+ pcsc-lite uses plug-ins to handle different types of smart cards. There is 
+ a plug-in for each smart-card type. Plug-ins are installed in the 
+-.I /usr/local/pcsc/services 
++.I /usr/lib/pcsc/services 
+ directory.  Plug-ins for cards/tokens are available from the MUSCLE
+ web site [http://www.musclecard.com].
+ .SH FILES
+ .I /etc/reader.conf
+-.I /usr/local/sbin/pcscd
++.I /usr/sbin/pcscd
+ .SH BUGS
+ None known.
+ .SH "SEE ALSO"
+diff -Nur pcsc-lite-1.1.1.orig/src/hotplug_linux.c pcsc-lite-1.1.1/src/hotplug_linux.c
+--- pcsc-lite-1.1.1.orig/src/hotplug_linux.c	Mon Jul  1 18:28:39 2002
++++ pcsc-lite-1.1.1/src/hotplug_linux.c	Tue Mar 11 10:53:30 2003
+@@ -31,7 +31,7 @@
+ #include "debuglog.h"
+ #include "sys_generic.h"
+ 
+-#define PCSCLITE_HP_DROPDIR                 	"/usr/local/pcsc/drivers/"
++#define PCSCLITE_HP_DROPDIR                 	"/usr/lib/pcsc/drivers/"
+ #define PCSCLITE_USB_PATH                       "/proc/bus/usb"
+ #define PCSCLITE_MANUKEY_NAME                   "ifdVendorID"
+ #define PCSCLITE_PRODKEY_NAME                   "ifdProductID"
+diff -Nur pcsc-lite-1.1.1.orig/src/tokenfactory.c pcsc-lite-1.1.1/src/tokenfactory.c
+--- pcsc-lite-1.1.1.orig/src/tokenfactory.c	Mon Jul  1 18:28:39 2002
++++ pcsc-lite-1.1.1/src/tokenfactory.c	Tue Mar 11 10:53:43 2003
+@@ -26,7 +26,7 @@
+ #include "tokenfactory.h"
+ 
+ #ifndef WIN32
+-#define MSC_SVC_DROPDIR                     "/usr/local/pcsc/services/"
++#define MSC_SVC_DROPDIR                     "/usr/lib/pcsc/services/"
+ #else
+ #define MSC_SVC_DROPDIR                     "C:\\Program Files\\Muscle\\Services\\"
+ #endif
+diff -Nur pcsc-lite-1.1.1.orig/src/utils/bundleTool.c pcsc-lite-1.1.1/src/utils/bundleTool.c
+--- pcsc-lite-1.1.1.orig/src/utils/bundleTool.c	Mon Jul  1 18:28:39 2002
++++ pcsc-lite-1.1.1/src/utils/bundleTool.c	Tue Mar 11 10:53:49 2003
+@@ -37,7 +37,7 @@
+  * The following defines personalize this for different tokens 
+  */
+ 
+-#define BUNDLE_DIR            "/usr/local/pcsc/services/"
++#define BUNDLE_DIR            "/usr/lib/pcsc/services/"
+ 
+ /*
+  * End of personalization 
+diff -Nur pcsc-lite-1.1.1.orig/src/utils/installifd.c pcsc-lite-1.1.1/src/utils/installifd.c
+--- pcsc-lite-1.1.1.orig/src/utils/installifd.c	Mon Jul  1 18:28:39 2002
++++ pcsc-lite-1.1.1/src/utils/installifd.c	Tue Mar 11 10:53:55 2003
+@@ -45,7 +45,7 @@
+ 
+ 	printf
+ 		("Please enter the full path of the readers driver (75 char max)\n");
+-	printf("Example: /usr/local/pcsc/drivers/librdr_generic.so\n");
++	printf("Example: /usr/lib/pcsc/drivers/librdr_generic.so\n");
+ 	printf("-----> ");
+ 
+ 	gets(lpcLibrary);
