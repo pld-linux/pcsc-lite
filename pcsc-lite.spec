@@ -3,7 +3,7 @@ Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.2.9
 %define	bver	beta6
-Release:	0.%{bver}.1
+Release:	0.%{bver}.2
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
@@ -12,6 +12,7 @@ Source0:	http://alioth.debian.org/download.php/753/%{name}-%{version}-%{bver}.ta
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
+Patch1:		%{name}-any.patch
 URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -79,6 +80,7 @@ Statyczne biblioteki PC/SC Lite.
 %prep
 %setup -q -n %{name}-%{version}-%{bver}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
