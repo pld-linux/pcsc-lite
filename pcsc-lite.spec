@@ -9,8 +9,15 @@ Source0:	http://linuxnet.com/middleware/file/%{name}-%{version}.tar.gz
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
+Patch1:		%{name}-link.patch
+Patch2:		%{name}-amfix.patch
 URL:		http://www.linuxnet.com/middle.html
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	flex
+BuildRequires:	libtool
 PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -66,10 +73,16 @@ Statyczne biblioteki PC/SC Lite.
 
 %prep
 %setup -q
-%patch -p1
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
-%configure2_13
+%{__libtoolize}
+%{__aclocal} -I build
+%{__autoconf}
+%{__automake}
+%configure
 
 %{__make}
 
