@@ -2,7 +2,7 @@ Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.1.1
-Release:	2
+Release:	3
 License:	BSD
 Group:		Daemons
 Source0:	http://linuxnet.com/middleware/file/%{name}-%{version}.tar.gz
