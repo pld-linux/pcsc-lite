@@ -73,6 +73,9 @@ Statyczne biblioteki PC/SC Lite.
 rm -rf $RPM_BUILD_ROOT
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
+# useful for drivers development
+install src/ifdhandler.h $RPM_BUILD_ROOT%{_includedir}
+
 # should have "chkconfig 2345 21 81"
 #install -m 755 etc/pcscd.startup /etc/rc.d/init.d/pcscd
 
