@@ -5,8 +5,8 @@ Version:	1.2.0
 Release:	1
 License:	BSD
 Group:		Daemons
-#Source0Download: https://alioth.debian.org/project/showfiles.php?group_id=1225
-Source0:	https://alioth.debian.org/download.php/419/%{name}-%{version}.tar.gz
+#Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=1225
+Source0:	http://alioth.debian.org/download.php/419/%{name}-%{version}.tar.gz
 # Source0-md5:	98456d274b2f4bfe74c5ab59070f8d50
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
