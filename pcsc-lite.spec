@@ -32,8 +32,8 @@ U¿ywa tego samego API winscard, które jest u¿ywane pod Microsoft[TM]
 Windows(R).
 
 %package libs
-Summary:	Libraries
-Summary(pl):	Bibloteki
+Summary:	PCSC libraries
+Summary(pl):	Biblioteki PCSC
 Group:		Libraries
 
 %description libs
@@ -55,8 +55,8 @@ Development files.
 Pliki dla programistów.
 
 %package static
-Summary:	Static libraries
-Summary(pl):	Bibloteki statyczne
+Summary:	Static PCSC libraries
+Summary(pl):	Biblioteki statyczne PCSC
 Group:		Development/Tools
 Requires:	%{name}-devel = %{version}
 
@@ -67,14 +67,16 @@ Static PSCS libraries.
 Statyczne biblioteki PCSC.
 
 %package -n pcsc-tools
-Summary:    Tools
-Summary(pl):   Narzêdzia 
-Group:      Development/Tools
-Requires:   %{name}-libs = %{version}
+Summary:	Tools
+Summary(pl):	Narzêdzia 
+Group:		Applications
+Requires:	%{name}-libs = %{version}
 
 %description -n pcsc-tools
+PCSC tools.
 
 %description -n pcsc-tools -l pl
+Narzêdzia do PCSC.
 
 %prep
 %setup -q -a1 -a2
@@ -90,7 +92,6 @@ cd ..
 cd pcsc-tools-%{_tools_version}
 %{__make}
 
-
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
@@ -100,8 +101,8 @@ rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1/}
 
-install  pcsc-tools-%{_tools_version}/{ATR_analysis,pcsc_scan,gscriptor,scriptor} $RPM_BUILD_ROOT%{_bindir}/
-install  pcsc-tools-%{_tools_version}/{ATR_analysis,pcsc_scan,gscriptor,scriptor}*gz $RPM_BUILD_ROOT%{_mandir}/man1/
+install pcsc-tools-%{_tools_version}/{ATR_analysis,pcsc_scan,gscriptor,scriptor} $RPM_BUILD_ROOT%{_bindir}
+install pcsc-tools-%{_tools_version}/{ATR_analysis,pcsc_scan,gscriptor,scriptor}*gz $RPM_BUILD_ROOT%{_mandir}/man1
 
 %clean
 rm -rf $RPM_BUILD_ROOT
