@@ -1,13 +1,26 @@
---- pcsc-lite-1.2.9-beta6/src/winscard.c.orig	2004-08-06 14:12:19.000000000 +0200
-+++ pcsc-lite-1.2.9-beta6/src/winscard.c	2004-08-23 11:06:08.000000000 +0200
-@@ -208,6 +208,12 @@
+--- pcsc-lite-1.2.9-beta7/src/winscard.c.orig	2005-03-01 21:16:13.000000000 +0100
++++ pcsc-lite-1.2.9-beta7/src/winscard.c	2005-03-03 12:29:40.000000000 +0100
+@@ -214,6 +214,12 @@
  			}
  			else
  			{
 +				/*
 +				 * If it is set to ANY let it do any of the protocols
 +				 */
-+				if (dwPreferredProtocols & SCARD_PROTOCOL_ANY)
++				if (dwPreferredProtocols & SCARD_PROTOCOL_ANY_OLD)
++					dwPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
++
+ 				if (! (dwPreferredProtocols & rContext->readerState->cardProtocol))
+ 					return SCARD_E_PROTO_MISMATCH;
+ 			}
+@@ -518,6 +524,12 @@
+ 			}
+ 			else
+ 			{
++				/*
++				 * If it is set to ANY let it do any of the protocols
++				 */
++				if (dwPreferredProtocols & SCARD_PROTOCOL_ANY_OLD)
 +					dwPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
 +
  				if (! (dwPreferredProtocols & rContext->readerState->cardProtocol))
