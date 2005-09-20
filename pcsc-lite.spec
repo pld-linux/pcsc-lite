@@ -2,13 +2,13 @@ Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.2.9
-%define	bver	beta7
+%define	bver	beta8
 Release:	0.%{bver}.1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/download.php/975/%{name}-%{version}-%{bver}.tar.gz
-# Source0-md5:	6457f8070e8950e66952000142b1b3bf
+Source0:	http://alioth.debian.org/download.php/1133/%{name}-%{version}-%{bver}.tar.gz
+# Source0-md5:	cd307695a7262660e51ab9f7aa68ce5a
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -25,6 +25,7 @@ Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		usbdropdir	/usr/%{_lib}/pcsc/drivers
+%define		muscledropdir	/usr/%{_lib}/pcsc/services
 
 %description
 pcscd is the daemon program for PC/SC Lite. It is a resource manager
@@ -77,6 +78,43 @@ Static PC/SC Lite libraries.
 %description static -l pl
 Statyczne biblioteki PC/SC Lite.
 
+%package -n libmusclecard
+Summary:	MuscleCard library
+Summary(pl):	Biblioteka MuscleCard
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description -n libmusclecard
+MuscleCard library.
+
+%description -n libmusclecard -l pl
+Biblioteka MuscleCard.
+
+%package -n libmusclecard-devel
+Summary:	Header files for MuscleCard library
+Summary(pl):	Pliki nag³ówkowe biblioteki MuscleCard
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+Requires:	libmusclecard = %{version}-%{release}
+
+%description -n libmusclecard-devel
+Header files for MuscleCard library.
+
+%description -n libmusclecard-devel -l pl
+Pliki nag³ówkowe biblioteki MuscleCard.
+
+%package -n libmusclecard-static
+Summary:	Static MuscleCard library
+Summary(pl):	Biblioteka statyczna MuscleCard
+Group:		Development/Libraries
+Requires:	libmusclecard-devel = %{version}-%{release}
+
+%description -n libmusclecard-static
+Static MuscleCard library.
+
+%description -n libmusclecard-static -l pl
+Statyczna biblioteka MuscleCard.
+
 %prep
 %setup -q -n %{name}-%{version}-%{bver}
 %patch0 -p1
@@ -89,6 +127,7 @@ Statyczne biblioteki PC/SC Lite.
 %{__autoheader}
 %{__automake}
 %configure \
+	--enable-muscledropdir=%{muscledropdir} \
 	--enable-runpid=/var/run/pcscd.pid \
 	--enable-usbdropdir=%{usbdropdir}
 
@@ -96,7 +135,7 @@ Statyczne biblioteki PC/SC Lite.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{usbdropdir} \
+install -d $RPM_BUILD_ROOT{%{usbdropdir},%{muscledropdir}} \
 	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -166,9 +205,31 @@ fi
 %attr(755,root,root) %{_libdir}/libpcsclite.so
 %{_libdir}/libpcsclite.la
 %{_includedir}/PCSC
+%exclude %{_includedir}/PCSC/mscdefines.h
+%exclude %{_includedir}/PCSC/musclecard.h
 %{_pkgconfigdir}/libpcsclite.pc
 %{_examplesdir}/%{name}-%{version}
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libpcsclite.a
+
+%files -n libmusclecard
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/bundleTool
+%attr(755,root,root) %{_libdir}/libmusclecard.so.*.*.*
+%{muscledropdir}
+%{_mandir}/man8/bundleTool.8*
+
+%files -n libmusclecard-devel
+%defattr(644,root,root,755)
+%doc libmusclecard/doc/muscle-api-1.3.0.pdf
+%attr(755,root,root) %{_libdir}/libmusclecard.so
+%{_libdir}/libmusclecard.la
+%{_includedir}/PCSC/mscdefines.h
+%{_includedir}/PCSC/musclecard.h
+%{_pkgconfigdir}/libmusclecard.pc
+
+%files -n libmusclecard-static
+%defattr(644,root,root,755)
+%{_libdir}/libmusclecard.a
