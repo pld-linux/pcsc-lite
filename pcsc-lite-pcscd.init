@@ -27,7 +27,7 @@ LOGGING="yes"
 [ -f /etc/sysconfig/pcscd ] && . /etc/sysconfig/pcscd
 
 if is_yes "${LOGGING}"; then
-	LOGOPT="-d syslog"
+	LOGOPT="-d"
 else
 	LOGOPT=""
 fi
