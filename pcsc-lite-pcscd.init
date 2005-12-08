@@ -30,25 +30,21 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/pcscd ]; then
-		# show "Starting %s service" pcscd
 		msg_starting pcscd
 		daemon pcscd $LOGOPT
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pcscd
 	else
-		# show "%s service is already running." pcscd
 		msg_already_running pcscd
 	fi
 	;;
   stop)
 	# Stop daemons.
-	# show "Stopping %s service" pcscd
 	if [ -f /var/lock/subsys/pcscd ]; then
 		msg_stopping pcscd
 		killproc pcscd
 		rm -f /var/lock/subsys/pcscd
 	else
-		# show "%s service is not running." pcscd
 		msg_not_running pcscd
 	fi	
 	;;
@@ -63,7 +59,6 @@ case "$1" in
 	exit $?
 	;;
   *)
-	# show "Usage: %s {start|stop|restart|force-reload|status}"
 	msg_usage "$0 {start|stop|restart|force-reload|status}"
 	exit 3
 esac
