@@ -46,7 +46,7 @@ case "$1" in
 		rm -f /var/lock/subsys/pcscd
 	else
 		msg_not_running pcscd
-	fi	
+	fi
 	;;
   restart|force-reload)
 	# pcscd doesn't support reloading on HUP
