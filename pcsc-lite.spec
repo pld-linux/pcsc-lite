@@ -17,8 +17,8 @@ BuildRequires:	automake
 BuildRequires:	flex
 BuildRequires:	libtool >= 1.4.2-9
 BuildRequires:	libusb-devel
-PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		muscledropdir	/usr/%{_lib}/pcsc/services
@@ -134,9 +134,9 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY doc/README.DAEMON
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/reader.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/reader.conf
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/pcscd
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pcscd
 %attr(755,root,root) %{_sbindir}/pcscd
 %attr(755,root,root) %{_bindir}/bundleTool
 %attr(755,root,root) %{_bindir}/formaticc
