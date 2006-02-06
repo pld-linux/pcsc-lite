@@ -2,13 +2,13 @@ Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.2.9
-%define	bver	beta9
+%define	bver	beta10
 Release:	0.%{bver}.1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/download.php/1289/%{name}-%{version}-%{bver}.tar.gz
-# Source0-md5:	12742c0b06590a8fd20c357cc1483fbf
+Source0:	http://alioth.debian.org/download.php/1426/%{name}-%{version}-%{bver}.tar.gz
+# Source0-md5:	9455fce914e7f1f234024af046a807c9
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -19,9 +19,9 @@ BuildRequires:	automake
 BuildRequires:	flex
 BuildRequires:	libtool >= 1.4.2-9
 BuildRequires:	libusb-devel
-PreReq:		rc-scripts
 Requires(pre):	fileutils
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		usbdropdir	/usr/%{_lib}/pcsc/drivers
