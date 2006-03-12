@@ -18,8 +18,9 @@ BuildRequires:	automake
 BuildRequires:	flex
 BuildRequires:	libtool >= 1.4.2-9
 BuildRequires:	libusb-devel
-Requires(pre):	fileutils
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
+Requires(pre):	fileutils
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -123,17 +124,11 @@ fi
 
 %post
 /sbin/chkconfig --add pcscd
-if [ -f /var/lock/subsys/pcscd ]; then
-	/etc/rc.d/init.d/pcscd restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/pcscd start\" to start pcscd daemon."
-fi
+%service pcscd restart "pcscd daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/pcscd ]; then
-		/etc/rc.d/init.d/pcscd stop >&2
-	fi
+	%service pcscd stop
 	/sbin/chkconfig --del pcscd
 fi
 
