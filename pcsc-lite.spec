@@ -1,13 +1,13 @@
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.3.0
+Version:	1.3.1
 Release:	1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/download.php/1472/%{name}-%{version}.tar.gz
-# Source0-md5:	ccbb595be0e1d47c9f9f449f183bea6c
+Source0:	http://alioth.debian.org/download.php/1565/%{name}-%{version}.tar.gz
+# Source0-md5:	90fa7e9cdfdfe88fdf6644ca8b60a681
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
