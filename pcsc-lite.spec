@@ -111,6 +111,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
 install doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 :> $RPM_BUILD_ROOT%{_sysconfdir}/reader.conf
+rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
