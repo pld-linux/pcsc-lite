@@ -18,6 +18,7 @@ BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
 BuildRequires:	libtool >= 1.4.2-9
 BuildRequires:	libusb-devel
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires(pre):	fileutils
