@@ -1,13 +1,13 @@
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl):	¦rodowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.3.2
-Release:	2
+Version:	1.3.3
+Release:	1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/download.php/1738/%{name}-%{version}.tar.gz
-# Source0-md5:	e9c8e5aa82e1710186ff31e4ff096888
+Source0:	http://alioth.debian.org/frs/download.php/1869/%{name}-%{version}.tar.gz
+# Source0-md5:	851b090aa0efedd0196f6afd9c0c61bb
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -139,9 +139,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY doc/README.DAEMON
-%attr(755,root,root) %{_bindir}/formaticc
-%attr(755,root,root) %{_sbindir}/installifd
+%doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY TODO doc/README.DAEMON
 %attr(755,root,root) %{_sbindir}/pcscd
 %attr(755,root,root) %{_sbindir}/update-reader.conf
 %{_libdir}/pcsc
@@ -153,6 +151,7 @@ fi
 %{_mandir}/man1/formaticc.1*
 %{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/pcscd.8*
+%{_mandir}/man8/update-reader.conf.8*
 
 %files libs
 %defattr(644,root,root,755)
