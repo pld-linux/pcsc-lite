@@ -1,5 +1,5 @@
 Summary:	Muscle PCSC Framework for Linux
-Summary(pl):	¦rodowisko PCSC dla Linuksa
+Summary(pl.UTF-8):   Åšrodowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.3.3
 Release:	1
@@ -36,47 +36,47 @@ provide a Windows(R) SCard interface in a very small form factor for
 communicating to smartcards and readers. PCSC Lite uses the same
 winscard api as used under Windows(R).
 
-%description -l pl
-pcscd jest demonem dla PC/SC Lite. Jest to zarz±dca zasobów,
-koordynuj±cy komunikacjê z czytnikami kart procesorowych pod³±czonymi
-do systemu. Celem PCSC Lite jest udostêpnienie interfejsu zgodnego z
-Windows(R) SCard s³u¿±cego do komunikacji z czytnikami kart chipowych.
-U¿ywa tego samego API winscard, które jest u¿ywane pod Microsoft(TM)
+%description -l pl.UTF-8
+pcscd jest demonem dla PC/SC Lite. Jest to zarzÄ…dca zasobÃ³w,
+koordynujÄ…cy komunikacjÄ™ z czytnikami kart procesorowych podÅ‚Ä…czonymi
+do systemu. Celem PCSC Lite jest udostÄ™pnienie interfejsu zgodnego z
+Windows(R) SCard sÅ‚uÅ¼Ä…cego do komunikacji z czytnikami kart chipowych.
+UÅ¼ywa tego samego API winscard, ktÃ³re jest uÅ¼ywane pod Microsoft(TM)
 Windows(R).
 
 %package libs
 Summary:	PC/SC Lite libraries
-Summary(pl):	Biblioteki PC/SC Lite
+Summary(pl.UTF-8):   Biblioteki PC/SC Lite
 Group:		Libraries
 
 %description libs
 PC/SC Lite libraries.
 
-%description libs -l pl
+%description libs -l pl.UTF-8
 Biblioteki PC/SC Lite.
 
 %package devel
 Summary:	PC/SC Lite development files
-Summary(pl):	Pliki dla programistów u¿ywaj±cych PC/SC Lite
+Summary(pl.UTF-8):   Pliki dla programistÃ³w uÅ¼ywajÄ…cych PC/SC Lite
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
 PC/SC Lite development files.
 
-%description devel -l pl
-Pliki dla programistów u¿ywaj±cych PC/SC Lite.
+%description devel -l pl.UTF-8
+Pliki dla programistÃ³w uÅ¼ywajÄ…cych PC/SC Lite.
 
 %package static
 Summary:	Static PC/SC Lite libraries
-Summary(pl):	Biblioteki statyczne PC/SC Lite
+Summary(pl.UTF-8):   Biblioteki statyczne PC/SC Lite
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static PC/SC Lite libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne biblioteki PC/SC Lite.
 
 %prep
