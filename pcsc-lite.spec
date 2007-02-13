@@ -1,5 +1,5 @@
 Summary:	Muscle PCSC Framework for Linux
-Summary(pl.UTF-8):   Środowisko PCSC dla Linuksa
+Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.3.3
 Release:	1
@@ -46,7 +46,7 @@ Windows(R).
 
 %package libs
 Summary:	PC/SC Lite libraries
-Summary(pl.UTF-8):   Biblioteki PC/SC Lite
+Summary(pl.UTF-8):	Biblioteki PC/SC Lite
 Group:		Libraries
 
 %description libs
@@ -57,7 +57,7 @@ Biblioteki PC/SC Lite.
 
 %package devel
 Summary:	PC/SC Lite development files
-Summary(pl.UTF-8):   Pliki dla programistów używających PC/SC Lite
+Summary(pl.UTF-8):	Pliki dla programistów używających PC/SC Lite
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -69,7 +69,7 @@ Pliki dla programistów używających PC/SC Lite.
 
 %package static
 Summary:	Static PC/SC Lite libraries
-Summary(pl.UTF-8):   Biblioteki statyczne PC/SC Lite
+Summary(pl.UTF-8):	Biblioteki statyczne PC/SC Lite
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
