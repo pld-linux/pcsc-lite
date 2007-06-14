@@ -1,13 +1,13 @@
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.4.0
+Version:	1.4.2
 Release:	1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/frs/download.php/1819/%{name}-%{version}.tar.gz
-# Source0-md5:	9ac845b62a683ce9f7c1331741f422ee
+Source0:	http://alioth.debian.org/frs/download.php/1977/%{name}-%{version}.tar.gz
+# Source0-md5:	285e8161371229242253e8adac96d861
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -20,6 +20,9 @@ BuildRequires:	libtool >= 1.4.2-9
 BuildRequires:	libusb-devel >= 0.1.7
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
+# temporary?
+BuildRequires:	tetex-format-pdflatex
+BuildRequires:	tetex-latex-ae
 Requires(post,preun):	/sbin/chkconfig
 Requires(pre):	fileutils
 Requires:	rc-scripts
@@ -96,6 +99,9 @@ Statyczne biblioteki PC/SC Lite.
 	--enable-usbdropdir=%{usbdropdir}
 
 %{__make}
+
+# temporary?
+%{__make} -C doc ifdhandler-3.pdf pcsc-lite.pdf
 
 %install
 rm -rf $RPM_BUILD_ROOT
