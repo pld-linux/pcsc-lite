@@ -1,13 +1,17 @@
+#
+# Conditional build:
+%bcond_without	hal	# use libusb instead of HAL
+#
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.4.99
+Version:	1.4.101
 Release:	1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/frs/download.php/2257/%{name}-%{version}.tar.gz
-# Source0-md5:	16c59b54edde9fa466c0e1f0eb86fd61
+Source0:	http://alioth.debian.org/frs/download.php/2424/%{name}-%{version}.tar.gz
+# Source0-md5:	af505407e44202093c14b3b1e08b1604
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -16,8 +20,9 @@ URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
+%{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libtool >= 1.4.2-9
-BuildRequires:	libusb-devel >= 0.1.7
+%{!?with_hal:BuildRequires:	libusb-devel >= 0.1.7}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
 # temporary?
@@ -94,6 +99,7 @@ Statyczne biblioteki PC/SC Lite.
 %{__autoheader}
 %{__automake}
 %configure \
+	%{!?with_hal:--disable-hal} \
 	--enable-muscledropdir=%{muscledropdir} \
 	--enable-runpid=/var/run/pcscd.pid \
 	--enable-usbdropdir=%{usbdropdir}
