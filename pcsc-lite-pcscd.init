@@ -32,11 +32,7 @@ else
 	LOGOPT=""
 fi
 
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
-	# Check if the service is already running?
+start() {
 	if [ ! -f /var/lock/subsys/pcscd ]; then
 		msg_starting pcscd
 		/usr/sbin/update-reader.conf && daemon pcscd $LOGOPT
@@ -45,9 +41,9 @@ case "$1" in
 	else
 		msg_already_running pcscd
 	fi
-	;;
-  stop)
-	# Stop daemons.
+}
+
+stop() {
 	if [ -f /var/lock/subsys/pcscd ]; then
 		msg_stopping pcscd
 		killproc pcscd
@@ -55,19 +51,44 @@ case "$1" in
 	else
 		msg_not_running pcscd
 	fi
+}
+
+condrestart() {
+	if [ -f /var/lock/subsys/pcscd ]; then
+		stop
+		start
+	else
+		msg_not_running pcscd
+		RETVAL=$1
+	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	start
 	;;
-  restart|force-reload)
+  stop)
+	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
 	# pcscd doesn't support reloading on HUP
-	$0 stop
-	$0 start
-	exit $?
+	condrestart 7
 	;;
   status)
 	status pcscd
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
 	exit 3
 esac
 
