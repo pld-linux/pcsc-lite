@@ -25,9 +25,9 @@ BuildRequires:	libtool >= 1.4.2-9
 %{!?with_hal:BuildRequires:	libusb-devel >= 0.1.7}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
-# temporary?
-BuildRequires:	tetex-format-pdflatex
-BuildRequires:	tetex-latex-ae
+BuildRequires:	texlive-format-pdflatex
+BuildRequires:	texlive-latex-ae
+BuildRequires:	texlive-xetex
 Requires(post,preun):	/sbin/chkconfig
 Requires(pre):	fileutils
 Requires:	rc-scripts
