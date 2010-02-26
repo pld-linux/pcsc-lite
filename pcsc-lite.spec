@@ -27,6 +27,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	texlive-format-pdflatex
 BuildRequires:	texlive-latex-ae
+BuildRequires:	texlive-latex-bibtex
 BuildRequires:	texlive-xetex
 Requires(post,preun):	/sbin/chkconfig
 Requires(pre):	fileutils
