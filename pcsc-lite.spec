@@ -5,13 +5,13 @@
 Summary:	Muscle PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.5.2
+Version:	1.5.5
 Release:	1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/frs/download.php/2795/%{name}-%{version}.tar.bz2
-# Source0-md5:	d7d466621bec39354351f09349f6374c
+Source0:	http://alioth.debian.org/frs/download.php/3082/%{name}-%{version}.tar.bz2
+# Source0-md5:	6707e967fc8bb398a5d1b1089d4dff63
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -99,7 +99,7 @@ Statyczne biblioteki PC/SC Lite.
 %{__autoheader}
 %{__automake}
 %configure \
-	%{!?with_hal:--disable-hal} \
+	%{!?with_hal:--disable-libhal} \
 	--enable-muscledropdir=%{muscledropdir} \
 	--enable-runpid=/var/run/pcscd.pid \
 	--enable-usbdropdir=%{usbdropdir}
