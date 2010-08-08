@@ -16,6 +16,8 @@ Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
+# remove (and bump libusb BR) after release of libusb-1 with libusb_strerror() function
+Patch2:		%{name}-libusb1.patch
 URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
@@ -91,6 +93,7 @@ Statyczne biblioteki PC/SC Lite.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__libtoolize}
