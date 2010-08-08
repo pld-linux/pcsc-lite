@@ -2,16 +2,16 @@
 # Conditional build:
 %bcond_without	hal	# use libusb instead of HAL
 #
-Summary:	Muscle PCSC Framework for Linux
+Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.5.5
+Version:	1.6.2
 Release:	1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/frs/download.php/3082/%{name}-%{version}.tar.bz2
-# Source0-md5:	6707e967fc8bb398a5d1b1089d4dff63
+Source0:	http://alioth.debian.org/frs/download.php/3329/%{name}-%{version}.tar.bz2
+# Source0-md5:	9e979368c2619d0a39e573530630aa95
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -22,7 +22,7 @@ BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libtool >= 1.4.2-9
-%{!?with_hal:BuildRequires:	libusb-devel >= 0.1.7}
+%{!?with_hal:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	texlive-format-pdflatex
@@ -35,7 +35,6 @@ Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		usbdropdir	/usr/%{_lib}/pcsc/drivers
-%define		muscledropdir	/usr/%{_lib}/pcsc/services
 
 %description
 pcscd is the daemon program for PC/SC Lite. It is a resource manager
@@ -101,18 +100,18 @@ Statyczne biblioteki PC/SC Lite.
 %{__automake}
 %configure \
 	%{!?with_hal:--disable-libhal} \
-	--enable-muscledropdir=%{muscledropdir} \
 	--enable-runpid=/var/run/pcscd.pid \
+	--enable-static \
 	--enable-usbdropdir=%{usbdropdir}
 
 %{__make}
 
 # temporary?
-%{__make} -C doc ifdhandler-3.pdf pcsc-lite.pdf
+%{__make} -C doc ifdhandler-3.pdf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{usbdropdir},%{muscledropdir}} \
+install -d $RPM_BUILD_ROOT%{usbdropdir} \
 	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -124,7 +123,6 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
 
 install doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
-:> $RPM_BUILD_ROOT%{_sysconfdir}/reader.conf
 rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
 
 %clean
@@ -154,16 +152,12 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY TODO doc/README.DAEMON
 %attr(755,root,root) %{_sbindir}/pcscd
-%attr(755,root,root) %{_sbindir}/update-reader.conf
 %{_libdir}/pcsc
 %dir %{_sysconfdir}/reader.conf.d
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/reader.conf.d/reader.conf
-%ghost %{_sysconfdir}/reader.conf
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pcscd
 %{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/pcscd.8*
-%{_mandir}/man8/update-reader.conf.8*
 
 %files libs
 %defattr(644,root,root,755)
@@ -172,7 +166,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/*.pdf
+%doc doc/ifdhandler-3.pdf
 %attr(755,root,root) %{_libdir}/libpcsclite.so
 %{_libdir}/libpcsclite.la
 %{_includedir}/PCSC
