@@ -5,19 +5,17 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.6.2
+Version:	1.6.4
 Release:	1
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/frs/download.php/3329/%{name}-%{version}.tar.bz2
-# Source0-md5:	9e979368c2619d0a39e573530630aa95
+Source0:	http://alioth.debian.org/frs/download.php/3337/%{name}-%{version}.tar.bz2
+# Source0-md5:	d2106e881803784fe2f27922d2d73bc0
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
-# remove (and bump libusb BR) after release of libusb-1 with libusb_strerror() function
-Patch2:		%{name}-libusb1.patch
 URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
@@ -93,7 +91,6 @@ Statyczne biblioteki PC/SC Lite.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 %{__libtoolize}
