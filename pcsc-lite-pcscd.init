@@ -30,7 +30,7 @@ LOGGING="yes"
 
 start() {
 	if [ -f /var/lock/subsys/pcscd ]; then
-		msg_already_running "pcscd"
+		msg_already_running "PC/SC smart card daemon"
 		return
 	fi
 
@@ -40,7 +40,7 @@ start() {
 		LOGOPT=""
 	fi
 
-	msg_starting "pcscd"
+	msg_starting "PC/SC smart card daemon"
 	daemon /usr/sbin/pcscd $LOGOPT
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pcscd
@@ -48,18 +48,18 @@ start() {
 
 stop() {
 	if [ ! -f /var/lock/subsys/pcscd ]; then
-		msg_not_running "pcscd"
+		msg_not_running "PC/SC smart card daemon"
 		return
 	fi
 
-	msg_stopping "pcscd"
+	msg_stopping "PC/SC smart card daemon"
 	killproc pcscd
 	rm -f /var/lock/subsys/pcscd
 }
 
 condrestart() {
 	if [ ! -f /var/lock/subsys/pcscd ]; then
-		msg_not_running "pcscd"
+		msg_not_running "PC/SC smart card daemon"
 		RETVAL=$1
 		return
 	fi
