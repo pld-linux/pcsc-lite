@@ -26,41 +26,44 @@ LOGGING="yes"
 # Get service config - may override defaults
 [ -f /etc/sysconfig/pcscd ] && . /etc/sysconfig/pcscd
 
-if is_yes "${LOGGING}"; then
-	LOGOPT="-d"
-else
-	LOGOPT=""
-fi
-
 start() {
-	if [ ! -f /var/lock/subsys/pcscd ]; then
-		msg_starting pcscd
-		daemon pcscd $LOGOPT
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pcscd
-	else
-		msg_already_running pcscd
+	if [ -f /var/lock/subsys/pcscd ]; then
+		msg_already_running "pcscd"
+		return
 	fi
+
+	if is_yes "${LOGGING}"; then
+		LOGOPT="-d"
+	else
+		LOGOPT=""
+	fi
+
+	msg_starting "pcscd"
+	daemon /usr/sbin/pcscd $LOGOPT
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pcscd
 }
 
 stop() {
-	if [ -f /var/lock/subsys/pcscd ]; then
-		msg_stopping pcscd
-		killproc pcscd
-		rm -f /var/lock/subsys/pcscd
-	else
-		msg_not_running pcscd
+	if [ ! -f /var/lock/subsys/pcscd ]; then
+		msg_not_running "pcscd"
+		return
 	fi
+
+	msg_stopping "pcscd"
+	killproc pcscd
+	rm -f /var/lock/subsys/pcscd
 }
 
 condrestart() {
-	if [ -f /var/lock/subsys/pcscd ]; then
-		stop
-		start
-	else
-		msg_not_running pcscd
+	if [ ! -f /var/lock/subsys/pcscd ]; then
+		msg_not_running "pcscd"
 		RETVAL=$1
+		return
 	fi
+
+	stop
+	start
 }
 
 RETVAL=0
@@ -85,7 +88,7 @@ case "$1" in
 	;;
   status)
 	status pcscd
-	exit $?
+	RETVAL=$?
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
@@ -93,6 +96,3 @@ case "$1" in
 esac
 
 exit $RETVAL
-
-# This must be last line !
-# vi:syntax=sh:tw=78:ts=8:sw=4
