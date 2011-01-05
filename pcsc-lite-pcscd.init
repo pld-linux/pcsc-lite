@@ -35,7 +35,7 @@ fi
 start() {
 	if [ ! -f /var/lock/subsys/pcscd ]; then
 		msg_starting pcscd
-		/usr/sbin/update-reader.conf && daemon pcscd $LOGOPT
+		daemon pcscd $LOGOPT
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pcscd
 	else
