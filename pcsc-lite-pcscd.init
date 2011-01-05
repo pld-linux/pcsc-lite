@@ -12,6 +12,9 @@
 # processname: pcscd
 # config:      /etc/reader.conf.d
 #
+# Note!  pcscd should be started after pcmcia, and shut down before it
+# for smooth experience with PCMCIA readers.
+#
 # $Id$
 
 # Source function library
