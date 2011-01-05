@@ -1,12 +1,12 @@
 #
 # Conditional build:
 %bcond_without	hal	# use libusb instead of HAL
-#
+
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.6.4
-Release:	1
+Release:	2
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
@@ -128,7 +128,7 @@ rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
+%pretrans
 # upgrade from pcsc-lite < 1.2.9-0.beta7
 if [ -f /etc/reader.conf -a ! -f /etc/reader.conf.d/reader.conf ]; then
 	install -d -m755 /etc/reader.conf.d
@@ -137,7 +137,7 @@ fi
 
 %post
 /sbin/chkconfig --add pcscd
-%service pcscd restart "pcscd daemon"
+%service pcscd restart "PC/SC smart card daemon"
 
 %preun
 if [ "$1" = "0" ]; then
@@ -152,7 +152,8 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY TODO doc/README.DAEMON
 %attr(755,root,root) %{_sbindir}/pcscd
-%{_libdir}/pcsc
+%dir %{_libdir}/pcsc
+%dir %{_libdir}/pcsc/drivers
 %dir %{_sysconfdir}/reader.conf.d
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pcscd
