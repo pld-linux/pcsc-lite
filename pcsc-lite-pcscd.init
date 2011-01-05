@@ -10,10 +10,9 @@
 #              cryptographic tokens that are connected to the system.
 #
 # processname: pcscd
-# config:      /etc/reader.conf
+# config:      /etc/reader.conf.d
 #
 # $Id$
-
 
 # Source function library
 . /etc/rc.d/init.d/functions
