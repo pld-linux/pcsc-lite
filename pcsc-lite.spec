@@ -6,7 +6,7 @@ Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.6.4
-Release:	2
+Release:	3
 License:	BSD
 Group:		Daemons
 #Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
@@ -16,6 +16,7 @@ Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
+Patch2:		noautostart.patch
 URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
@@ -91,6 +92,7 @@ Statyczne biblioteki PC/SC Lite.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__libtoolize}
@@ -118,10 +120,10 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
+cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
 
-install doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -a doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
 
