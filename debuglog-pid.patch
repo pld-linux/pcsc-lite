@@ -1,0 +1,31 @@
+--- pcsc-lite-1.6.6/src/debuglog.c~	2010-06-30 15:40:58.000000000 +0300
++++ pcsc-lite-1.6.6/src/debuglog.c	2011-01-12 01:58:18.693291099 +0200
+@@ -104,6 +104,8 @@
+ {
+ 	char DebugBuffer[DEBUG_BUF_SIZE];
+ 	va_list argptr;
++	// boolean not to do openlog several times
++	static int syslog_opened = 0;
+ 
+ 	if ((LogSuppress != DEBUGLOG_LOG_ENTRIES)
+ 		|| (priority < LogLevel) /* log priority lower than threshold? */
+@@ -114,13 +116,18 @@
+ 	vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
+ 	va_end(argptr);
+ 
++	if (DEBUGLOG_SYSLOG_DEBUG == LogMsgType && !syslog_opened) {
++		openlog(NULL, LOG_PID, LOG_DAEMON);
++		syslog_opened = 1;
++	}
++
+ 	log_line(priority, DebugBuffer);
+ } /* log_msg */
+ 
+ static void log_line(const int priority, const char *DebugBuffer)
+ {
+ 	if (DEBUGLOG_SYSLOG_DEBUG == LogMsgType)
+-		syslog(LOG_INFO, "%s", DebugBuffer);
++		syslog(LOG_DEBUG, "%s", DebugBuffer);
+ 	else
+ 	{
+ 		if (LogDoColor)

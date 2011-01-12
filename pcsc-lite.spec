@@ -17,6 +17,7 @@ Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
 Patch2:		noautostart.patch
+Patch3:		debuglog-pid.patch
 URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
@@ -101,6 +102,7 @@ Dokumentacja API biblioteki PC/SC Lite.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %{__libtoolize}
