@@ -28,7 +28,7 @@ BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
 %{?with_apidocs:BuildRequires:	graphviz}
 %{?with_hal:BuildRequires:	hal-devel}
-BuildRequires:	libtool >= 1.4.2-9
+BuildRequires:	libtool >= 2:2.0
 %{!?with_hal:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
