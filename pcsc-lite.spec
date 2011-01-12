@@ -108,6 +108,8 @@ Dokumentacja API biblioteki PC/SC Lite.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+# auto power down unreliable yet
+CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
 %configure \
 	%{!?with_hal:--disable-libhal} \
 	--enable-static \
