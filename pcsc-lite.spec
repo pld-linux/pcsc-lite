@@ -114,6 +114,7 @@ Dokumentacja API biblioteki PC/SC Lite.
 CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
 %configure \
 	%{!?with_hal:--disable-libhal} \
+	--enable-ipcdir=/var/run/pcscd \
 	--enable-static \
 	--enable-usbdropdir=%{usbdropdir}
 
@@ -176,6 +177,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pcscd
 %{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/pcscd.8*
+%dir /var/run/pcscd
 
 %files libs
 %defattr(644,root,root,755)
