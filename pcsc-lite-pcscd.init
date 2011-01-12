@@ -23,7 +23,8 @@
 umask 077
 
 # Set defaults
-LOGGING="yes"
+LOGLEVEL=""
+PCSCD_OPTIONS=""
 
 # Get service config - may override defaults
 [ -f /etc/sysconfig/pcscd ] && . /etc/sysconfig/pcscd
@@ -34,14 +35,15 @@ start() {
 		return
 	fi
 
-	if is_yes "${LOGGING}"; then
-		LOGOPT="-d"
-	else
-		LOGOPT=""
-	fi
+	local logopt
+	case "$LOGLEVEL" in
+	debug|info|error|critical)
+		logopt=--$LOGLEVEL
+	;;
+	esac
 
 	msg_starting "PC/SC smart card daemon"
-	daemon /usr/sbin/pcscd $LOGOPT
+	daemon /usr/sbin/pcscd $logopt $PCSCD_OPTIONS
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pcscd
 }
