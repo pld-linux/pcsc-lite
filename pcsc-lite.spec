@@ -5,13 +5,13 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.6.4
-Release:	3
+Version:	1.6.6
+Release:	0.2
 License:	BSD
 Group:		Daemons
-#Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/frs/download.php/3337/%{name}-%{version}.tar.bz2
-# Source0-md5:	d2106e881803784fe2f27922d2d73bc0
+# Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
+Source0:	http://alioth.debian.org/download.php/3479/%{name}-%{version}.tar.bz2
+# Source0-md5:	f80d3ecd9569b71d557f283f16295c74
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -21,17 +21,14 @@ URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
+%{?with_apidocs:BuildRequires:	graphviz}
 %{?with_hal:BuildRequires:	hal-devel}
 BuildRequires:	libtool >= 1.4.2-9
 %{!?with_hal:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
-BuildRequires:	texlive-format-pdflatex
-BuildRequires:	texlive-latex-ae
-BuildRequires:	texlive-latex-bibtex
-BuildRequires:	texlive-xetex
 Requires(post,preun):	/sbin/chkconfig
-Requires(pre):	fileutils
+Requires(pretrans):	fileutils
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -88,6 +85,17 @@ Static PC/SC Lite libraries.
 %description static -l pl.UTF-8
 Statyczne biblioteki PC/SC Lite.
 
+%package apidocs
+Summary:	PC/SC Lite API documentation
+Summary(pl.UTF-8):	Dokumentacja API biblioteki PC/SC Lite
+Group:		Documentation
+
+%description apidocs
+API and internal documentation for PC/SC Lite library.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API biblioteki PC/SC Lite.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -102,14 +110,15 @@ Statyczne biblioteki PC/SC Lite.
 %{__automake}
 %configure \
 	%{!?with_hal:--disable-libhal} \
-	--enable-runpid=/var/run/pcscd.pid \
 	--enable-static \
 	--enable-usbdropdir=%{usbdropdir}
 
 %{__make}
 
-# temporary?
-%{__make} -C doc ifdhandler-3.pdf
+%if %{with apidocs}
+doxygen doc/doxygen.conf
+rm -f doc/api/*.{map,md5}
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -119,6 +128,8 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
 cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
@@ -169,7 +180,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/ifdhandler-3.pdf
+%doc doc/example/pcsc_demo.c
 %attr(755,root,root) %{_libdir}/libpcsclite.so
 %{_libdir}/libpcsclite.la
 %{_includedir}/PCSC
@@ -179,3 +190,9 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libpcsclite.a
+
+%if %{with apidocs}
+%files apidocs
+%defattr(644,root,root,755)
+%doc doc/api/*
+%endif
