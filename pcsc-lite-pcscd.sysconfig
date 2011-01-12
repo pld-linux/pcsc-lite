@@ -1,7 +1,10 @@
 # Customized settings for pcscd
 
-# set to "no" if you don't want pcscd messages in syslog
-LOGGING="yes"
+# set loglevel. valid values: debug, info, error, critical
+#LOGLEVEL="debug"
+
+# options for pcscd daemon
+#PCSCD_OPTIONS=""
 
 # Define nice level for pcscd
 SERVICE_RUN_NICE_LEVEL="+0"
