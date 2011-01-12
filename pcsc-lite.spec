@@ -1,3 +1,7 @@
+# TODO
+# - pcscd & pcscd-lite-libs need to be exactly same version installed otherwise
+#   client will flood daemon so much that daemon is not usable (max 200
+#   connections reached, etc)
 #
 # Conditional build:
 %bcond_without	hal	# use libusb instead of HAL
@@ -6,7 +10,7 @@ Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.6.6
-Release:	0.2
+Release:	0.3
 License:	BSD
 Group:		Daemons
 # Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
@@ -30,7 +34,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires(pretrans):	fileutils
-Requires:	rc-scripts
+Requires:	rc-scripts >= 0.4.1.26
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		usbdropdir	/usr/%{_lib}/pcsc/drivers
@@ -129,6 +133,7 @@ rm -f doc/api/*.{map,md5}
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{usbdropdir} \
 	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
+	$RPM_BUILD_ROOT/var/run/pcscd \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %{__make} install \
@@ -186,7 +191,6 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/example/pcsc_demo.c
 %attr(755,root,root) %{_libdir}/libpcsclite.so
 %{_libdir}/libpcsclite.la
 %{_includedir}/PCSC
