@@ -4,18 +4,18 @@
 #   connections reached, etc)
 #
 # Conditional build:
-%bcond_without	hal	# use libusb instead of HAL
-
+%bcond_without	udev	# use libusb instead of libudev
+#
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.6.6
+Version:	1.7.0
 Release:	1
 License:	BSD
 Group:		Daemons
 # Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/download.php/3479/%{name}-%{version}.tar.bz2
-# Source0-md5:	f80d3ecd9569b71d557f283f16295c74
+Source0:	http://alioth.debian.org/frs/download.php/3527/%{name}-%{version}.tar.bz2
+# Source0-md5:	df69029ddbf62b9ae5f9307183d19a4d
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Patch0:		%{name}-fhs.patch
@@ -28,9 +28,9 @@ BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
 %{?with_apidocs:BuildRequires:	graphviz}
-%{?with_hal:BuildRequires:	hal-devel}
+%{?with_udev:BuildRequires:	udev-devel}
 BuildRequires:	libtool >= 2:2.0
-%{!?with_hal:BuildRequires:	libusb-devel >= 1.0}
+%{!?with_udev:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
@@ -119,7 +119,7 @@ Dokumentacja API biblioteki PC/SC Lite.
 # auto power down unreliable yet
 CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
 %configure \
-	%{!?with_hal:--disable-libhal} \
+	%{!?with_udev:--disable-libudev} \
 	--enable-ipcdir=/var/run/pcscd \
 	--enable-static \
 	--enable-usbdropdir=%{usbdropdir}
@@ -135,6 +135,7 @@ rm -f doc/api/*.{map,md5}
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{usbdropdir} \
 	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
+	$RPM_BUILD_ROOT%{_sysconfdir}/reader.conf.d \
 	$RPM_BUILD_ROOT/var/run/pcscd \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -148,16 +149,14 @@ cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
 
 cp -a doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
-rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %pretrans
 # upgrade from pcsc-lite < 1.2.9-0.beta7
-if [ -f /etc/reader.conf -a ! -f /etc/reader.conf.d/reader.conf ]; then
-	install -d -m755 /etc/reader.conf.d
-	cp -af /etc/reader.conf /etc/reader.conf.d/reader.conf
+if [ -f /etc/reader.conf -a ! -f %{_sysconfdir}/reader.conf.d/reader.conf ]; then
+	install -d -m755 %{_sysconfdir}/reader.conf.d
+	cp -af /etc/reader.conf %{_sysconfdir}/reader.conf.d/reader.conf
 fi
 
 %post
