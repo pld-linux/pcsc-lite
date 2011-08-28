@@ -1,0 +1,24 @@
+description "PC/SC Smartcard daemon"
+
+# Note!  pcscd should be started after pcmcia, and shut down before it
+# for smooth experience with PCMCIA readers.
+
+# Set defaults
+env LOGLEVEL=""
+env PCSCD_OPTIONS=""
+
+respawn
+expect fork
+
+script
+	[ -f /etc/sysconfig/pcscd ] && . /etc/sysconfig/pcscd
+
+	local logopt
+	case "$LOGLEVEL" in
+	debug|info|error|critical)
+		logopt=--$LOGLEVEL
+	;;
+	esac
+
+	exec /usr/sbin/pcscd $logopt $PCSCD_OPTIONS
+end script

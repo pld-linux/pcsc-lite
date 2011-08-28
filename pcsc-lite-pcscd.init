@@ -20,6 +20,8 @@
 # Source function library
 . /etc/rc.d/init.d/functions
 
+upstart_controlled
+
 umask 077
 
 # Set defaults

@@ -5,12 +5,12 @@
 #
 # Conditional build:
 %bcond_without	udev	# use libusb instead of libudev
-#
+
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.7.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Daemons
 # Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
@@ -18,6 +18,7 @@ Source0:	http://alioth.debian.org/frs/download.php/3527/%{name}-%{version}.tar.b
 # Source0-md5:	df69029ddbf62b9ae5f9307183d19a4d
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
+Source3:	pcscd.upstart
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
 Patch2:		noautostart.patch
@@ -134,7 +135,7 @@ rm -f doc/api/*.{map,md5}
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{usbdropdir} \
-	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
+	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,init} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/reader.conf.d \
 	$RPM_BUILD_ROOT/var/run/pcscd \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
@@ -145,9 +146,10 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
-cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/init/pcscd
 
-cp -a doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -p doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -180,6 +182,7 @@ fi
 %dir %{_libdir}/pcsc/drivers
 %dir %{_sysconfdir}/reader.conf.d
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
+%config(noreplace) %verify(not md5 mtime size) /etc/init/pcscd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pcscd
 %{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/pcscd.8*
