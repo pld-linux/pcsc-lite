@@ -29,11 +29,11 @@ BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
 %{?with_apidocs:BuildRequires:	graphviz}
-%{?with_udev:BuildRequires:	udev-devel}
 BuildRequires:	libtool >= 2:2.0
 %{!?with_udev:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
+%{?with_udev:BuildRequires:	udev-devel}
 Requires(post,preun):	/sbin/chkconfig
 Requires(pretrans):	fileutils
 Requires:	rc-scripts >= 0.4.1.26
