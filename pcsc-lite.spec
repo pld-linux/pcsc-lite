@@ -10,7 +10,7 @@ Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.7.4
-Release:	1
+Release:	2
 License:	BSD
 Group:		Daemons
 # Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
@@ -147,7 +147,7 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
-cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/init/pcscd.conf
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/init/pcscd.conf
 
 cp -p doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
