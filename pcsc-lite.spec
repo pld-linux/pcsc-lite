@@ -36,7 +36,7 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_udev:BuildRequires:	udev-devel}
 Requires(post,preun):	/sbin/chkconfig
 Requires(pretrans):	fileutils
-Requires:	rc-scripts >= 0.4.1.26
+Requires:	rc-scripts >= 0.4.3.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		usbdropdir	/usr/%{_lib}/pcsc/drivers
