@@ -9,21 +9,20 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.7.4
-Release:	2
+Version:	1.8.0
+Release:	1
 License:	BSD
 Group:		Daemons
 # Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/frs/download.php/3598/%{name}-%{version}.tar.bz2
-# Source0-md5:	1caf0b8ca2ecbf82fe3b035b3fff22dd
+Source0:	http://alioth.debian.org/frs/download.php/3684/%{name}-%{version}.tar.bz2
+# Source0-md5:	8af937240126a4afdcf235e98a6d861a
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source3:	pcscd.upstart
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
-Patch2:		noautostart.patch
-Patch3:		debuglog-pid.patch
-Patch4:		configure-expand.patch
+Patch2:		debuglog-pid.patch
+Patch3:		configure-expand.patch
 URL:		http://www.linuxnet.com/middle.html
 BuildRequires:	autoconf >= 2.58
 BuildRequires:	automake >= 1:1.8
@@ -109,7 +108,6 @@ Dokumentacja API biblioteki PC/SC Lite.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -192,11 +190,15 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpcsclite.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libpcsclite.so.1
+%attr(755,root,root) %{_libdir}/libpcscspy.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libpcscspy.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpcsclite.so
+%attr(755,root,root) %{_libdir}/libpcscspy.so
 %{_libdir}/libpcsclite.la
+%{_libdir}/libpcscspy.la
 %{_includedir}/PCSC
 %{_pkgconfigdir}/libpcsclite.pc
 %{_examplesdir}/%{name}-%{version}
@@ -204,6 +206,7 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libpcsclite.a
+%{_libdir}/libpcscspy.a
 
 %if %{with apidocs}
 %files apidocs
