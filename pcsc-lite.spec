@@ -119,6 +119,7 @@ Dokumentacja API biblioteki PC/SC Lite.
 CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
 %configure \
 	%{!?with_udev:--disable-libudev} \
+	--disable-silent-rules \
 	--enable-ipcdir=/var/run/pcscd \
 	--enable-static \
 	--enable-usbdropdir=%{usbdropdir}
