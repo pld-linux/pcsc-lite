@@ -19,6 +19,7 @@ Source0:	http://alioth.debian.org/frs/download.php/3687/%{name}-%{version}.tar.b
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source3:	pcscd.upstart
+Source4:	%{name}.tmpfiles
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
 Patch2:		debuglog-pid.patch
@@ -137,7 +138,8 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,init} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/reader.conf.d \
 	$RPM_BUILD_ROOT/var/run/pcscd \
-	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -147,6 +149,7 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
 cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/init/pcscd.conf
+install %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 cp -p doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -186,6 +189,7 @@ fi
 %{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/pcscd.8*
 %dir /var/run/pcscd
+/usr/lib/tmpfiles.d/%{name}.conf
 
 %files libs
 %defattr(644,root,root,755)
