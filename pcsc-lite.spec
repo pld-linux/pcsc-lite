@@ -32,11 +32,12 @@ BuildRequires:	flex
 BuildRequires:	libtool >= 2:2.0
 %{!?with_udev:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.647
 %{?with_udev:BuildRequires:	udev-devel}
 Requires(post,preun):	/sbin/chkconfig
 Requires(pretrans):	fileutils
 Requires:	rc-scripts >= 0.4.3.0
+Requires:	systemd-units >= 38
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		usbdropdir	/usr/%{_lib}/pcsc/drivers
@@ -166,12 +167,20 @@ fi
 %post
 /sbin/chkconfig --add pcscd
 %service pcscd restart "PC/SC smart card daemon"
+%systemd_post pcscd.service pcscd.socket
 
 %preun
 if [ "$1" = "0" ]; then
 	%service pcscd stop
 	/sbin/chkconfig --del pcscd
 fi
+%systemd_preun pcscd.service pcscd.socket
+
+%postun
+%systemd_reload
+
+%triggerpostun -- pcsc-lite < 1.8.3-1
+%systemd_trigger pcscd.service pcscd.socket
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
