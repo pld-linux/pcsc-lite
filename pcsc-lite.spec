@@ -9,13 +9,13 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.8.1
-Release:	3
+Version:	1.8.3
+Release:	1
 License:	BSD
 Group:		Daemons
 # Source0Download: http://alioth.debian.org/project/showfiles.php?group_id=30105
-Source0:	http://alioth.debian.org/frs/download.php/3687/%{name}-%{version}.tar.bz2
-# Source0-md5:	fd035e4f610eba6fa545159e60d0d780
+Source0:	http://alioth.debian.org/frs/download.php/3706/%{name}-%{version}.tar.bz2
+# Source0-md5:	7ad8c97c89f77aab7a00317eb7e811e9
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source3:	pcscd.upstart
@@ -179,6 +179,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY TODO doc/README.DAEMON
+%attr(755,root,root) %{_bindir}/pcsc-spy
 %attr(755,root,root) %{_sbindir}/pcscd
 %dir %{_libdir}/pcsc
 %dir %{_libdir}/pcsc/drivers
@@ -186,9 +187,12 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
 %config(noreplace) %verify(not md5 mtime size) /etc/init/pcscd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pcscd
+%{_mandir}/man1/pcsc-spy.1*
 %{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/pcscd.8*
 %dir /var/run/pcscd
+%{systemdunitdir}/pcscd.service
+%{systemdunitdir}/pcscd.socket
 /usr/lib/tmpfiles.d/%{name}.conf
 
 %files libs
