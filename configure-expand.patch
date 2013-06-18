@@ -1,5 +1,5 @@
---- pcsc-lite-1.6.6/configure.in~	2010-12-12 12:03:57.000000000 +0200
-+++ pcsc-lite-1.6.6/configure.in	2011-01-12 02:44:22.154890564 +0200
+--- pcsc-lite-1.8.8/configure.ac~	2010-12-12 12:03:57.000000000 +0200
++++ pcsc-lite-1.8.8/configure.ac	2011-01-12 02:44:22.154890564 +0200
 @@ -338,6 +338,7 @@
  AC_SUBST(host_to_ccid_16)
  AC_SUBST(host_to_ccid_32)
