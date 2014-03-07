@@ -4,18 +4,19 @@
 #   connections reached, etc)
 #
 # Conditional build:
-%bcond_without	udev	# use libusb instead of libudev
+%bcond_without	polkit	# polkit support
+%bcond_without	udev	# udev support (plain libusb if disabled)
 
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.8.8
+Version:	1.8.11
 Release:	1
 License:	BSD
 Group:		Daemons
 # Source0Download: https://alioth.debian.org/frs/?group_id=30105
-Source0:	https://alioth.debian.org/frs/download.php/file/3862/%{name}-%{version}.tar.bz2
-# Source0-md5:	069dc875a2ae2d85a2ebceac73252c0a
+Source0:	https://alioth.debian.org/frs/download.php/file/3991/%{name}-%{version}.tar.bz2
+# Source0-md5:	73502ca4ba6526727f9f49c63d805408
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source3:	pcscd.upstart
@@ -24,18 +25,20 @@ Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
 Patch2:		debuglog-pid.patch
 Patch3:		configure-expand.patch
-URL:		http://www.linuxnet.com/middle.html
-BuildRequires:	autoconf >= 2.59
+URL:		https://alioth.debian.org/projects/pcsclite/
+BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
 %{?with_apidocs:BuildRequires:	graphviz}
 BuildRequires:	libtool >= 2:2.0
 %{!?with_udev:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	pkgconfig
+%{?with_polkit:BuildRequires:	polkit-devel >= 0.111}
 BuildRequires:	rpmbuild(macros) >= 1.647
 %{?with_udev:BuildRequires:	udev-devel}
 Requires(post,preun):	/sbin/chkconfig
 Requires(pretrans):	fileutils
+%{?with_polkit:Requires:	polkit >= 0.111}
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 38
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -123,6 +126,7 @@ CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
 	%{!?with_udev:--disable-libudev} \
 	--disable-silent-rules \
 	--enable-ipcdir=/var/run/pcscd \
+	%{?with_polkit:--enable-polkit} \
 	--enable-static \
 	--enable-usbdropdir=%{usbdropdir}
 
@@ -187,7 +191,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY TODO doc/README.DAEMON
+%doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY TODO doc/README.{DAEMON,polkit}
 %attr(755,root,root) %{_bindir}/pcsc-spy
 %attr(755,root,root) %{_sbindir}/pcscd
 %dir %{_libdir}/pcsc
@@ -203,6 +207,9 @@ fi
 %{systemdunitdir}/pcscd.service
 %{systemdunitdir}/pcscd.socket
 /usr/lib/tmpfiles.d/%{name}.conf
+%if %{with polkit}
+%{_datadir}/polkit-1/actions/org.debian.pcsc-lite.policy
+%endif
 
 %files libs
 %defattr(644,root,root,755)

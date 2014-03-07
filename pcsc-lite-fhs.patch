@@ -1,14 +1,12 @@
---- pcsc-lite-1.2.9-beta5/DRIVERS.orig	2004-05-14 09:01:00.000000000 +0200
-+++ pcsc-lite-1.2.9-beta5/DRIVERS	2004-07-30 16:48:19.000000000 +0200
-@@ -2,18 +2,18 @@
- 
- To install USB drivers, download the driver from http://www.linuxnet.com/
- and copy it to a temporary location.  After you have unarchived the files
--copy the directory to /usr/local/pcsc/drivers/.  If the directory
--/usr/local/pcsc/drivers/ does not exist create it before copying the driver
-+copy the directory to /usr/lib*/pcsc/drivers/.  If the directory
-+/usr/lib*/pcsc/drivers/ does not exist create it before copying the driver
- directory to it.
+--- pcsc-lite-1.8.11/DRIVERS.orig	2014-03-07 21:54:54.054804707 +0100
++++ pcsc-lite-1.8.11/DRIVERS	2014-03-07 21:59:19.138126916 +0100
+@@ -3,17 +3,17 @@
+ To install USB drivers, download the driver from
+ http://musclecard.com/software.html and copy it to a temporary location.
+ After you have unarchived the files copy the directory to
+-/usr/local/pcsc/drivers/.  If the directory /usr/local/pcsc/drivers/
++/usr/lib*/pcsc/drivers/.  If the directory /usr/lib*/pcsc/drivers/
+ does not exist create it before copying the driver directory to it.
  
  Example Mac OS X, Linux 2.4:
  
