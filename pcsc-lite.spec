@@ -11,7 +11,7 @@ Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
 Version:	1.8.11
-Release:	2
+Release:	3
 License:	BSD
 Group:		Daemons
 # Source0Download: https://alioth.debian.org/frs/?group_id=30105
@@ -19,7 +19,6 @@ Source0:	https://alioth.debian.org/frs/download.php/file/3991/%{name}-%{version}
 # Source0-md5:	73502ca4ba6526727f9f49c63d805408
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
-Source3:	pcscd.upstart
 Source4:	%{name}.tmpfiles
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
@@ -140,7 +139,7 @@ rm -f doc/api/*.{map,md5}
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{usbdropdir} \
-	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig,init} \
+	$RPM_BUILD_ROOT/etc/{rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/reader.conf.d \
 	$RPM_BUILD_ROOT/var/run/pcscd \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version} \
@@ -153,7 +152,6 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
-cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/init/pcscd.conf
 install %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 cp -p doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
@@ -198,7 +196,6 @@ fi
 %dir %{_libdir}/pcsc/drivers
 %dir %{_sysconfdir}/reader.conf.d
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
-%config(noreplace) %verify(not md5 mtime size) /etc/init/pcscd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pcscd
 %{_mandir}/man1/pcsc-spy.1*
 %{_mandir}/man5/reader.conf.5*
