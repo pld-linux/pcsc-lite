@@ -10,13 +10,13 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.8.17
+Version:	1.8.20
 Release:	1
 License:	BSD
 Group:		Daemons
 # Source0Download: https://alioth.debian.org/frs/?group_id=30105
-Source0:	https://alioth.debian.org/frs/download.php/file/4173/%{name}-%{version}.tar.bz2
-# Source0-md5:	f0e98285843903527bd9e043df81e73b
+Source0:	https://alioth.debian.org/frs/download.php/file/4203/%{name}-%{version}.tar.bz2
+# Source0-md5:	5e195a90ce1b96625cde1c49c8bf7790
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
