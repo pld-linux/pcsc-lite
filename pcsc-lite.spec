@@ -5,18 +5,19 @@
 #
 # Conditional build:
 %bcond_without	polkit	# polkit support
+%bcond_without	systemd	# libsystemd support
 %bcond_without	udev	# udev support (plain libusb if disabled)
 
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.8.22
+Version:	1.8.23
 Release:	1
 License:	BSD
 Group:		Daemons
 # Source0Download: https://alioth.debian.org/frs/?group_id=30105
-Source0:	https://alioth.debian.org/frs/download.php/file/4225/%{name}-%{version}.tar.bz2
-# Source0-md5:	0ec103b1ef298d0c58d6ef6b00b9cf17
+Source0:	https://alioth.debian.org/frs/download.php/file/4235/%{name}-%{version}.tar.bz2
+# Source0-md5:	3ba4b45456a500b5f1f22bf56a2dee38
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
@@ -34,6 +35,7 @@ BuildRequires:	libtool >= 2:2.0
 BuildRequires:	pkgconfig
 %{?with_polkit:BuildRequires:	polkit-devel >= 0.111}
 BuildRequires:	rpmbuild(macros) >= 1.647
+%{?with_systemd:BuildRequires:	systemd-devel}
 %{?with_udev:BuildRequires:	udev-devel}
 Requires(post,preun):	/sbin/chkconfig
 Requires(pretrans):	fileutils
@@ -122,6 +124,7 @@ Dokumentacja API biblioteki PC/SC Lite.
 # auto power down unreliable yet
 CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
 %configure \
+	%{!?with_systemd:--disable-libsystemd} \
 	%{!?with_udev:--disable-libudev} \
 	--disable-silent-rules \
 	--enable-ipcdir=/var/run/pcscd \
