@@ -15,6 +15,8 @@ Version:	1.8.25
 Release:	1
 License:	BSD
 Group:		Daemons
+# TODO: switch to release tarballs
+#Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.bz2
 # Source0Download: https://salsa.debian.org/rousseau/PCSC/tags
 Source0:	https://salsa.debian.org/rousseau/PCSC/-/archive/pcsc-%{version}/PCSC-pcsc-%{version}.tar.bz2
 # Source0-md5:	d104b1c779c15c1da28294095ae0014e
