@@ -11,21 +11,20 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.8.23
+Version:	1.8.25
 Release:	1
 License:	BSD
 Group:		Daemons
-# Source0Download: https://alioth.debian.org/frs/?group_id=30105
-Source0:	https://alioth.debian.org/frs/download.php/file/4235/%{name}-%{version}.tar.bz2
-# Source0-md5:	3ba4b45456a500b5f1f22bf56a2dee38
+# Source0Download: https://salsa.debian.org/rousseau/PCSC/tags
+Source0:	https://salsa.debian.org/rousseau/PCSC/-/archive/pcsc-%{version}/PCSC-pcsc-%{version}.tar.bz2
+# Source0-md5:	d104b1c779c15c1da28294095ae0014e
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
-Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-any.patch
 Patch2:		debuglog-pid.patch
 Patch3:		configure-expand.patch
-URL:		https://alioth.debian.org/projects/pcsclite/
+URL:		https://pcsclite.apdu.fr/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
@@ -109,8 +108,7 @@ API and internal documentation for PC/SC Lite library.
 Dokumentacja API biblioteki PC/SC Lite.
 
 %prep
-%setup -q
-%patch0 -p1
+%setup -q -n PCSC-pcsc-%{version}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -192,7 +190,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog* DRIVERS HELP NEWS README SECURITY TODO doc/README.{DAEMON,polkit}
+%doc AUTHORS COPYING ChangeLog HELP README SECURITY TODO doc/README.{DAEMON,polkit}
 %attr(755,root,root) %{_bindir}/pcsc-spy
 %attr(755,root,root) %{_sbindir}/pcscd
 %dir %{_libdir}/pcsc
