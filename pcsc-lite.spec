@@ -115,6 +115,8 @@ Dokumentacja API biblioteki PC/SC Lite.
 %patch2 -p1
 %patch3 -p1
 
+%{__sed} -i -e '1s,/usr/bin/python$,%{__python},' src/spy/pcsc-spy
+
 %build
 %{__libtoolize}
 %{__aclocal} -I m4
