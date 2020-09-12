@@ -1,4 +1,5 @@
 # TODO
+# - follow upstream with using /run instead of /var/run
 # - pcscd & pcscd-lite-libs need to be exactly same version installed otherwise
 #   client will flood daemon so much that daemon is not usable (max 200
 #   connections reached, etc)
@@ -11,15 +12,12 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.8.25
+Version:	1.9.0
 Release:	1
 License:	BSD
 Group:		Daemons
-# TODO: switch to release tarballs
-#Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.bz2
-# Source0Download: https://salsa.debian.org/rousseau/PCSC/tags
-Source0:	https://salsa.debian.org/rousseau/PCSC/-/archive/pcsc-%{version}/PCSC-pcsc-%{version}.tar.bz2
-# Source0-md5:	d104b1c779c15c1da28294095ae0014e
+Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.bz2
+# Source0-md5:	eb595f2d398ff229207a6ec09fbc4e98
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
@@ -110,12 +108,12 @@ API and internal documentation for PC/SC Lite library.
 Dokumentacja API biblioteki PC/SC Lite.
 
 %prep
-%setup -q -n PCSC-pcsc-%{version}
+%setup -q
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 
-%{__sed} -i -e '1s,/usr/bin/python$,%{__python},' src/spy/pcsc-spy
+%{__sed} -i -e '1s, /usr/bin/python$,%{__python},' src/spy/pcsc-spy
 
 %build
 %{__libtoolize}
