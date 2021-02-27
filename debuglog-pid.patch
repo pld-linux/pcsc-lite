@@ -7,10 +7,10 @@
 +	// boolean not to do openlog several times
 +	static int syslog_opened = 0;
  
- 	if ((LogSuppress != DEBUGLOG_LOG_ENTRIES)
- 		|| (priority < LogLevel) /* log priority lower than threshold? */
+ 	if ((priority < LogLevel) /* log priority lower than threshold? */
+ 		|| (DEBUGLOG_NO_DEBUG == LogMsgType))
 @@ -114,13 +116,18 @@
- 	vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
+ 	vsnprintf(DebugBuffer, sizeof DebugBuffer, fmt, argptr);
  	va_end(argptr);
  
 +	if (DEBUGLOG_SYSLOG_DEBUG == LogMsgType && !syslog_opened) {
@@ -28,4 +28,4 @@
 +		syslog(LOG_DEBUG, "%s", DebugBuffer);
  	else
  	{
- 		if (LogDoColor)
+ 		static struct timeval last_time = { 0, 0 };
