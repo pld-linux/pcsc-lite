@@ -12,18 +12,17 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	1.9.1
+Version:	1.9.5
 Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	de449fb9dc0bb57ede502905accc0d8b
+# Source0-md5:	67fe439397aee0eb3ceaad03280a26a1
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
 Patch1:		%{name}-any.patch
 Patch2:		debuglog-pid.patch
-Patch3:		configure-expand.patch
 URL:		https://pcsclite.apdu.fr/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.8
@@ -111,7 +110,6 @@ Dokumentacja API biblioteki PC/SC Lite.
 %setup -q
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %{__sed} -i -e '1s, /usr/bin/python$,%{__python3},' src/spy/pcsc-spy
 
