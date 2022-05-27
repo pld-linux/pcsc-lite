@@ -25,6 +25,7 @@ Patch1:		%{name}-any.patch
 Patch2:		debuglog-pid.patch
 URL:		https://pcsclite.apdu.fr/
 BuildRequires:	autoconf >= 2.69
+BuildRequires:	autoconf-archive
 BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
 %{?with_apidocs:BuildRequires:	graphviz}
