@@ -31,6 +31,7 @@ BuildRequires:	flex
 %{?with_apidocs:BuildRequires:	graphviz}
 BuildRequires:	libtool >= 2:2.0
 %{!?with_udev:BuildRequires:	libusb-devel >= 1.0}
+BuildRequires:	perl-tools-pod
 BuildRequires:	pkgconfig
 %{?with_polkit:BuildRequires:	polkit-devel >= 0.111}
 BuildRequires:	rpmbuild(macros) >= 1.647
