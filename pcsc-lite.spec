@@ -35,6 +35,7 @@ BuildRequires:	libtool >= 2:2.0
 BuildRequires:	perl-tools-pod
 BuildRequires:	pkgconfig
 %{?with_polkit:BuildRequires:	polkit-devel >= 0.111}
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.647
 %{?with_systemd:BuildRequires:	systemd-devel}
 %{?with_udev:BuildRequires:	udev-devel}
@@ -102,6 +103,7 @@ Statyczne biblioteki PC/SC Lite.
 Summary:	PC/SC Lite API documentation
 Summary(pl.UTF-8):	Dokumentacja API biblioteki PC/SC Lite
 Group:		Documentation
+BuildArch:	noarch
 
 %description apidocs
 API and internal documentation for PC/SC Lite library.
