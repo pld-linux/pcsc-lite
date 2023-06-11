@@ -5,6 +5,7 @@
 #   connections reached, etc)
 #
 # Conditional build:
+%bcond_without	apidocs	# API documentation
 %bcond_without	polkit	# polkit support
 %bcond_without	systemd	# libsystemd support
 %bcond_without	udev	# udev support (plain libusb if disabled)
@@ -28,7 +29,7 @@ BuildRequires:	autoconf >= 2.69
 BuildRequires:	autoconf-archive
 BuildRequires:	automake >= 1:1.8
 BuildRequires:	flex
-%{?with_apidocs:BuildRequires:	graphviz}
+%{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	libtool >= 2:2.0
 %{!?with_udev:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	perl-tools-pod
