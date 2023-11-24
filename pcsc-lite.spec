@@ -13,12 +13,12 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	2.0.0
+Version:	2.0.1
 Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	45bf7ef136537f68a26976d89f631cbf
+# Source0-md5:	730d069764c769ba3bac391a96c8a54f
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
@@ -131,7 +131,7 @@ CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
 	%{!?with_udev:--disable-libudev} \
 	--disable-silent-rules \
 	--enable-ipcdir=/var/run/pcscd \
-	%{?with_polkit:--enable-polkit} \
+	%{__enable_disable polkit} \
 	--enable-static \
 	--enable-usbdropdir=%{usbdropdir}
 
