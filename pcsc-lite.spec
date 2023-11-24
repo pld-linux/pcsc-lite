@@ -5,10 +5,11 @@
 #   connections reached, etc)
 #
 # Conditional build:
-%bcond_without	apidocs	# API documentation
-%bcond_without	polkit	# polkit support
-%bcond_without	systemd	# libsystemd support
-%bcond_without	udev	# udev support (plain libusb if disabled)
+%bcond_without	apidocs		# API documentation
+%bcond_without	polkit		# polkit support
+%bcond_without	static_libs	# static libraries
+%bcond_without	systemd		# libsystemd support
+%bcond_without	udev		# udev support (plain libusb if disabled)
 
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
@@ -132,7 +133,7 @@ CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
 	--disable-silent-rules \
 	--enable-ipcdir=/var/run/pcscd \
 	%{__enable_disable polkit} \
-	--enable-static \
+	%{__enable_disable static_libs static} \
 	--enable-usbdropdir=%{usbdropdir}
 
 %{__make}
@@ -231,10 +232,12 @@ fi
 %{_pkgconfigdir}/libpcsclite.pc
 %{_examplesdir}/%{name}-%{version}
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libpcsclite.a
 %{_libdir}/libpcscspy.a
+%endif
 
 %if %{with apidocs}
 %files apidocs
