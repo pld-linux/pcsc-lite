@@ -14,15 +14,16 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	2.0.3
+Version:	2.1.0
 Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	4167d2d3fa2be3f8e24b2f44e38a35ee
+# Source0-md5:	132f3cfb8642ee7600233c7742e92bc4
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
+Patch0:		missing-symbol.patch
 Patch1:		%{name}-any.patch
 Patch2:		debuglog-pid.patch
 URL:		https://pcsclite.apdu.fr/
@@ -114,6 +115,7 @@ Dokumentacja API biblioteki PC/SC Lite.
 
 %prep
 %setup -q
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 
@@ -196,7 +198,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog HELP README SECURITY TODO doc/README.polkit
+%doc AUTHORS COPYING ChangeLog HELP README SECURITY doc/README.polkit
 %attr(755,root,root) %{_bindir}/pcsc-spy
 %attr(755,root,root) %{_sbindir}/pcscd
 %dir %{_libdir}/pcsc
@@ -219,14 +221,18 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpcsclite.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libpcsclite.so.1
+%attr(755,root,root) %{_libdir}/libpcsclite_real.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libpcsclite_real.so.1
 %attr(755,root,root) %{_libdir}/libpcscspy.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libpcscspy.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpcsclite.so
+%attr(755,root,root) %{_libdir}/libpcsclite_real.so
 %attr(755,root,root) %{_libdir}/libpcscspy.so
 %{_libdir}/libpcsclite.la
+%{_libdir}/libpcsclite_real.la
 %{_libdir}/libpcscspy.la
 %{_includedir}/PCSC
 %{_pkgconfigdir}/libpcsclite.pc
