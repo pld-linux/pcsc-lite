@@ -242,6 +242,7 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libpcsclite.a
+%{_libdir}/libpcsclite_real.a
 %{_libdir}/libpcscspy.a
 %endif
 
