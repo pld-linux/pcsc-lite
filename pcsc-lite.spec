@@ -210,8 +210,10 @@ fi
 %{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/pcscd.8*
 %dir /var/run/pcscd
+%if %{with systemd}
 %{systemdunitdir}/pcscd.service
 %{systemdunitdir}/pcscd.socket
+%endif
 /usr/lib/tmpfiles.d/%{name}.conf
 %if %{with polkit}
 %{_datadir}/polkit-1/actions/org.debian.pcsc-lite.policy
