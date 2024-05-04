@@ -14,18 +14,17 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	2.1.0
+Version:	2.2.0
 Release:	1
 License:	BSD
 Group:		Daemons
-Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	132f3cfb8642ee7600233c7742e92bc4
+Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.xz
+# Source0-md5:	9e4006e1f3210ffa7dd0fadbc9083dc2
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
-Patch0:		missing-symbol.patch
-Patch1:		%{name}-any.patch
-Patch2:		debuglog-pid.patch
+Patch0:		%{name}-any.patch
+Patch1:		debuglog-pid.patch
 URL:		https://pcsclite.apdu.fr/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	autoconf-archive
@@ -40,7 +39,9 @@ BuildRequires:	pkgconfig
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.647
 %{?with_systemd:BuildRequires:	systemd-devel}
+BuildRequires:	tar >= 1:1.22
 %{?with_udev:BuildRequires:	udev-devel}
+BuildRequires:	xz
 Requires(post,preun):	/sbin/chkconfig
 Requires(pretrans):	fileutils
 %{?with_polkit:Requires:	polkit >= 0.111}
@@ -117,7 +118,6 @@ Dokumentacja API biblioteki PC/SC Lite.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %{__sed} -i -e '1s, /usr/bin/python$,%{__python3},' src/spy/pcsc-spy
 
