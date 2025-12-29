@@ -14,12 +14,12 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	2.3.3
+Version:	2.4.0
 Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.xz
-# Source0-md5:	b364c6495b1658218785be2e00f5052d
+# Source0-md5:	b0d6b2f8c902b9ef0c148acfcab459de
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
@@ -42,7 +42,15 @@ BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	tar >= 1:1.22
 %{?with_udev:BuildRequires:	udev-devel}
 BuildRequires:	xz
+Provides:	group(pcscd)
+Provides:	user(pcscd)
 Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
 Requires(pretrans):	fileutils
 %{?with_polkit:Requires:	polkit >= 0.111}
 Requires:	rc-scripts >= 0.4.3.0
@@ -152,7 +160,7 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 	$RPM_BUILD_ROOT%{_sysconfdir}/reader.conf.d \
 	$RPM_BUILD_ROOT/var/run/pcscd \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version} \
-	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -161,7 +169,7 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pcscd
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/pcscd
-install %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 cp -p doc/example/*.c $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
@@ -174,6 +182,10 @@ if [ -f /etc/reader.conf -a ! -f %{_sysconfdir}/reader.conf.d/reader.conf ]; the
 	install -d -m755 %{_sysconfdir}/reader.conf.d
 	cp -af /etc/reader.conf %{_sysconfdir}/reader.conf.d/reader.conf
 fi
+
+%pre
+%groupadd -g 356 pcscd
+%useradd -u 356 -d /usr/share/empty -g pcscd -c "PC/SC Smart Card Daemon" pcscd
 
 %post
 /sbin/chkconfig --add pcscd
@@ -189,6 +201,10 @@ fi
 
 %postun
 %systemd_reload
+if [ "$1" = "0" ]; then
+	%userremove pcscd
+	%groupremove pcscd
+fi
 
 %triggerpostun -- pcsc-lite < 1.8.3-1
 %systemd_trigger pcscd.service pcscd.socket
@@ -214,25 +230,25 @@ fi
 %{systemdunitdir}/pcscd.service
 %{systemdunitdir}/pcscd.socket
 %endif
-/usr/lib/tmpfiles.d/%{name}.conf
+%{systemdtmpfilesdir}/pcsc-lite.conf
 %if %{with polkit}
 %{_datadir}/polkit-1/actions/org.debian.pcsc-lite.policy
 %endif
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libpcsclite.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libpcsclite.so.1
-%attr(755,root,root) %{_libdir}/libpcsclite_real.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libpcsclite_real.so.1
-%attr(755,root,root) %{_libdir}/libpcscspy.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libpcscspy.so.0
+%{_libdir}/libpcsclite.so.*.*.*
+%ghost %{_libdir}/libpcsclite.so.1
+%{_libdir}/libpcsclite_real.so.*.*.*
+%ghost %{_libdir}/libpcsclite_real.so.1
+%{_libdir}/libpcscspy.so.*.*.*
+%ghost %{_libdir}/libpcscspy.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libpcsclite.so
-%attr(755,root,root) %{_libdir}/libpcsclite_real.so
-%attr(755,root,root) %{_libdir}/libpcscspy.so
+%{_libdir}/libpcsclite.so
+%{_libdir}/libpcsclite_real.so
+%{_libdir}/libpcscspy.so
 %{_libdir}/libpcsclite.la
 %{_libdir}/libpcsclite_real.la
 %{_libdir}/libpcscspy.la
