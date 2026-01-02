@@ -29,8 +29,8 @@ URL:		https://pcsclite.apdu.fr/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	autoconf-archive
 BuildRequires:	automake >= 1:1.8
-BuildRequires:	flex
 %{?with_apidocs:BuildRequires:	doxygen}
+BuildRequires:	flex
 BuildRequires:	libtool >= 2:2.0
 %{!?with_udev:BuildRequires:	libusb-devel >= 1.0}
 BuildRequires:	perl-tools-pod
@@ -55,6 +55,7 @@ Requires(pretrans):	fileutils
 %{?with_polkit:Requires:	polkit >= 0.111}
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 38
+Conflicts:	pcsc-driver-ccid < 1.7.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		usbdropdir	/usr/%{_lib}/pcsc/drivers
