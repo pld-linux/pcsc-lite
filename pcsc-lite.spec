@@ -14,12 +14,12 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	2.4.0
-Release:	2
+Version:	2.4.1
+Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.xz
-# Source0-md5:	b0d6b2f8c902b9ef0c148acfcab459de
+# Source0-md5:	fd6349f53039308027413e6e8a1a8a1f
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
