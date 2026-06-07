@@ -14,30 +14,28 @@
 Summary:	PCSC Framework for Linux
 Summary(pl.UTF-8):	Środowisko PCSC dla Linuksa
 Name:		pcsc-lite
-Version:	2.4.1
-Release:	2
+Version:	2.5.0
+Release:	1
 License:	BSD
 Group:		Daemons
 Source0:	https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.xz
-# Source0-md5:	fd6349f53039308027413e6e8a1a8a1f
+# Source0-md5:	d452145c4e89cf56cef512597395b501
 Source1:	%{name}-pcscd.init
 Source2:	%{name}-pcscd.sysconfig
 Source4:	%{name}.tmpfiles
 Patch0:		%{name}-any.patch
 Patch1:		debuglog-pid.patch
 URL:		https://pcsclite.apdu.fr/
-BuildRequires:	autoconf >= 2.69
-BuildRequires:	autoconf-archive
-BuildRequires:	automake >= 1:1.8
 %{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	flex
-BuildRequires:	libtool >= 2:2.0
 %{!?with_udev:BuildRequires:	libusb-devel >= 1.0}
+BuildRequires:	meson >= 0.58.0
+BuildRequires:	ninja >= 1.5
 BuildRequires:	perl-tools-pod
 BuildRequires:	pkgconfig
 %{?with_polkit:BuildRequires:	polkit-devel >= 0.111}
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.647
+BuildRequires:	rpmbuild(macros) >= 2.042
 %{?with_systemd:BuildRequires:	systemd-devel}
 BuildRequires:	tar >= 1:1.22
 %{?with_udev:BuildRequires:	udev-devel}
@@ -131,27 +129,24 @@ Dokumentacja API biblioteki PC/SC Lite.
 %{__sed} -i -e '1s, /usr/bin/python$,%{__python3},' src/spy/pcsc-spy
 
 %build
-%{__libtoolize}
-%{__aclocal} -I m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
 # auto power down unreliable yet
 CPPFLAGS="%{rpmcppflags} -DDISABLE_ON_DEMAND_POWER_ON"
-%configure \
-	%{!?with_systemd:--disable-libsystemd} \
-	%{!?with_udev:--disable-libudev} \
-	--disable-silent-rules \
-	--enable-ipcdir=/var/run/pcscd \
-	%{__enable_disable polkit} \
-	%{__enable_disable static_libs static} \
-	--enable-usbdropdir=%{usbdropdir}
+%meson \
+	-Dipcdir=/var/run/pcscd \
+	-Dlibsystemd=%{__true_false systemd} \
+	-Dlibudev=%{__true_false udev} \
+	%{!?with_udev:-Dlibusb=true} \
+	-Dpolkit=%{__true_false polkit} \
+	-Dserial=true \
+	-Dsystemdunit=system \
+	-Dusb=true \
+	-Dusbdropdir=%{usbdropdir}
 
-%{__make}
+%meson_build
 
 %if %{with apidocs}
-doxygen doc/doxygen.conf
-rm -f doc/api/*.{map,md5}
+cd build
+doxygen doxygen.conf
 %endif
 
 %install
@@ -163,8 +158,7 @@ install -d $RPM_BUILD_ROOT%{usbdropdir} \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+%meson_install
 
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/%{name}
 
@@ -223,14 +217,17 @@ fi
 %dir %{_sysconfdir}/reader.conf.d
 %attr(754,root,root) /etc/rc.d/init.d/pcscd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/pcscd
+%{_datadir}/metainfo/fr.apdu.pcsclite.metainfo.xml
 %{_mandir}/man1/pcsc-spy.1*
 %{_mandir}/man5/reader.conf.5*
 %{_mandir}/man8/pcscd.8*
 %dir /var/run/pcscd
 %if %{with systemd}
+%config(noreplace) %verify(not md5 mtime size) /etc/default/pcscd
 %{systemdunitdir}/pcscd.service
 %{systemdunitdir}/pcscd.socket
 %endif
+%{_sysusersdir}/pcscd-sysusers.conf
 %{systemdtmpfilesdir}/pcsc-lite.conf
 %if %{with polkit}
 %{_datadir}/polkit-1/actions/org.debian.pcsc-lite.policy
@@ -238,21 +235,15 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%{_libdir}/libpcsclite.so.*.*.*
-%ghost %{_libdir}/libpcsclite.so.1
-%{_libdir}/libpcsclite_real.so.*.*.*
-%ghost %{_libdir}/libpcsclite_real.so.1
-%{_libdir}/libpcscspy.so.*.*.*
-%ghost %{_libdir}/libpcscspy.so.0
+%{_libdir}/libpcsclite.so.1
+%{_libdir}/libpcsclite_real.so.1
+%{_libdir}/libpcscspy.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %{_libdir}/libpcsclite.so
 %{_libdir}/libpcsclite_real.so
 %{_libdir}/libpcscspy.so
-%{_libdir}/libpcsclite.la
-%{_libdir}/libpcsclite_real.la
-%{_libdir}/libpcscspy.la
 %{_includedir}/PCSC
 %{_pkgconfigdir}/libpcsclite.pc
 %{_examplesdir}/%{name}-%{version}
@@ -261,12 +252,11 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libpcsclite.a
-%{_libdir}/libpcsclite_real.a
 %{_libdir}/libpcscspy.a
 %endif
 
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc doc/api/*
+%doc build/doc/api/*
 %endif

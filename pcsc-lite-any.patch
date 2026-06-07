@@ -1,6 +1,6 @@
---- pcsc-lite-1.5.2/src/winscard.c.orig	2009-02-06 09:46:20.000000000 +0100
-+++ pcsc-lite-1.5.2/src/winscard.c	2009-04-02 22:54:43.137718835 +0200
-@@ -430,6 +430,12 @@
+--- pcsc-lite-2.5.0/src/winscard.c.orig	2026-05-27 14:39:48.000000000 +0200
++++ pcsc-lite-2.5.0/src/winscard.c	2026-06-07 19:48:38.070569555 +0200
+@@ -408,6 +408,12 @@ LONG SCardConnect(/*@unused@*/ SCARDCONT
  			{
  				(void)pthread_mutex_unlock(rContext->mMutex);
  
@@ -10,10 +10,10 @@
 +				if (dwPreferredProtocols & SCARD_PROTOCOL_ANY_OLD)
 +					dwPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
 +
- 				if (! (dwPreferredProtocols & rContext->readerState->cardProtocol))
+ 				if (! (dwPreferredProtocols & rContext->readerState.cardProtocol))
  				{
  					rv = SCARD_E_PROTO_MISMATCH;
-@@ -758,6 +764,12 @@
+@@ -708,6 +714,12 @@ LONG SCardReconnect(SCARDHANDLE hCard, D
  			{
  				(void)pthread_mutex_unlock(rContext->mMutex);
  
@@ -23,6 +23,6 @@
 +				if (dwPreferredProtocols & SCARD_PROTOCOL_ANY_OLD)
 +					dwPreferredProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
 +
- 				if (! (dwPreferredProtocols & rContext->readerState->cardProtocol))
+ 				if (! (dwPreferredProtocols & rContext->readerState.cardProtocol))
  				{
  					rv = SCARD_E_PROTO_MISMATCH;
