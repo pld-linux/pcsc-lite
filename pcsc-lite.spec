@@ -89,7 +89,7 @@ Biblioteki PC/SC Lite.
 Summary:	PC/SC Lite development files
 Summary(pl.UTF-8):	Pliki dla programistów używających PC/SC Lite
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
 %description devel
 PC/SC Lite development files.
@@ -101,7 +101,7 @@ Pliki dla programistów używających PC/SC Lite.
 Summary:	Static PC/SC Lite libraries
 Summary(pl.UTF-8):	Biblioteki statyczne PC/SC Lite
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel%{?_isa} = %{version}-%{release}
 
 %description static
 Static PC/SC Lite libraries.
